@@ -1,0 +1,342 @@
+html {
+    overflow-x: hidden;
+}
+
+header#site-header {
+    background-color: #ffffff;
+    padding: 20px 15px;
+    transition: all .3s ease;
+    width: 100%;
+    z-index: 2;
+}
+
+header.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,.3);
+}
+
+header#site-header ul.menu-navigation {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+header#site-header .team-logo {
+    max-width: 120px;
+}
+
+header#site-header ul.menu-navigation li {
+    display: inline;
+    padding-right: 12px;
+}
+
+header#site-header ul.menu-navigation li:last-of-type {
+    padding-right: 0;
+}
+
+header#site-header ul.menu-navigation li a {
+    color: #363636;
+    font-family: 'ubuntu-bold';
+    font-size: 18px;
+    text-decoration: none;
+    transition: all .3s ease;
+}
+
+header#site-header ul.menu-navigation li a:hover {
+    color: #8e50ff;
+}
+
+header#site-header ul.social-icons img {
+    width: 35px;
+}
+
+#gnft-banner h1 {
+    color: #8e50ff;
+    font-family: 'ubuntu-bold';
+    font-size: 42px;
+    line-height: 1.4;
+}
+
+#gnft-banner p {
+    color: #363636;
+    font-family: 'open-sans-regular';
+    font-size: 16px;
+    line-height: 1.8;
+    margin-top: 10px;
+}
+
+#gnft-banner p span {
+    color: #8e50ff;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#gnft-banner p a {
+    color: #8e50ff;
+    text-decoration: none;
+    transition: all .3s ease;
+}
+
+#gnft-banner p a:hover {
+    opacity: .6;
+}
+
+#gnft-banner img#ethereum-logo {
+    width: 200px;
+    margin-top: 10px;
+}
+
+#gnft-banner .gnft-slider {
+    margin-top: 60px;
+}
+
+#gnft-minting-section .mint-info img {
+    width: 140px;
+    margin-bottom: 10px;
+}
+
+#gnft-minting-section .mint-info h2{
+    color: #8e50ff;
+    font-family: 'ubuntu-bold';
+    font-size: 36px;
+    line-height: 1.4;
+}
+
+#gnft-minting-section .mint-info p {
+    color: #363636;
+    font-family: 'open-sans-regular';
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+#gnft-minting-section .mint-info p.gas-fee {
+    font-size: 14px;
+    margin-top: -10px;
+}
+
+#gnft-minting-section .mint-info button {
+    background-color: #8e50ff;
+    border-radius: 15px;
+    border: 0;
+    color: #ffffff;
+    font-family: 'ubuntu-bold';
+    font-size: 18px;
+    padding: 12px;
+    width: 160px;
+}
+
+#gnft-minting-section .message {
+    margin-top: 60px;
+    padding: 0 15px;
+}
+
+#gnft-minting-section .message p {
+    color: #363636;
+    font-family: 'open-sans-regular';
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+#follow-us {
+    background-color: #363636;
+    padding: 40px 15px;
+}
+
+#follow-us h3 {
+    color: #ffffff;
+    font-family: 'ubuntu-bold';
+    font-size: 32px;
+    line-height: 1.4;
+}
+
+#follow-us ul {
+    display: inline-flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+#follow-us ul li {
+    padding-right: 15px;
+}
+
+#follow-us ul li:last-of-type {
+    padding-right: 0;
+}
+
+#follow-us ul img {
+    width: 40px;
+}
+
+footer#site-footer {
+    background-color: #0a0a0a;
+    padding: 10px 15px;
+}
+
+footer#site-footer p {
+    color: #ffffff;
+    font-size: 14px;
+    margin: 0;
+}
+
+footer#site-footer p a {
+    color: #8e50ff;
+    text-decoration: none;
+    transition: all .3s ease;
+}
+
+footer#site-footer p a:hover {
+    opacity: .6;
+}
+
+.global-padding {
+    padding: 80px 0; 
+}
+
+.global-top-padding {
+    padding: 60px 0 0 0; 
+}
+
+.claim-code-input {
+    border-radius: 10px;
+    border: 1px solid #8e50ff;
+    color:  #363636;
+    font-family: 'open-sans-regular';
+    font-size: 16px;
+    line-height: 1.8;
+    margin-top: 10px;
+    padding: 5px 10px;
+    width: 280px;
+}
+
+/**  404 Page Starts Here **/
+
+#gnft-not-found #wrap-not-found {
+    height: 80vh;
+    padding: 60px 15px 60px 15px;
+}
+
+#gnft-not-found #wrap-not-found h1 {
+    color: #8e50ff;
+    font-size: 144px;
+    font-family: 'ubuntu-bold';
+}
+
+#gnft-not-found #wrap-not-found h2 {
+    color: #363636;
+    font-size: 30px;
+    line-height: 1.8;
+}
+
+#gnft-not-found #wrap-not-found p {
+    color: #363636;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+#gnft-not-found #wrap-not-found img {
+    width: 120px;
+}
+
+/** 404 Page Ends Here **/
+
+@media only screen and (max-width: 1024px) {
+    header#site-header ul.social-icons img {
+        width: 30px;
+    }
+
+    #gnft-banner h1 {
+        font-size: 32px;
+    }
+
+    #gnft-minting-section .mint-info h2 {
+        font-size: 28px;
+    }
+
+    #gnft-minting-section .message {
+        margin-top: 10px;
+    }
+
+    #gnft-not-found #wrap-not-found h1 {
+        font-size: 120px;
+    }
+
+    #gnft-not-found #wrap-not-found h2 {
+        color: #363636;
+        font-size: 20px;
+        line-height: 1.8;
+    }
+
+}
+
+@media only screen and (max-width: 767px) {
+    .global-padding {
+        padding: 60px 0; 
+    }
+
+    .global-top-padding {
+        padding: 60px 0 0 0; 
+    }
+
+    #gnft-banner h1 {
+        font-size: 28px;
+    }
+
+    #gnft-minting-section .mint-info h2 {
+        font-size: 24px;
+    }
+
+    #gnft-not-found #wrap-not-found h1 {
+        font-size: 100px;
+    }
+
+}
+
+/** Fonts Starts Here **/
+
+@font-face {
+    font-family: 'open-sans-regular';
+    src: url('../fonts/open-sans-regular/OpenSans-Regular.eot');
+    src: url('../fonts/open-sans-regular/OpenSans-Regular.?#iefix') format('embedded-opentype'),
+         url('../fonts/open-sans-regular/OpenSans-Regular.woff2') format('woff2'),
+         url('../fonts/open-sans-regular/OpenSans-Regular.woff') format('woff'),
+         url('../fonts/open-sans-regular/OpenSans-Regular.ttf') format('truetype'),
+         url('../fonts/open-sans-regular/OpenSans-Regular.svg#OpenSans-Regular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ubuntu-bold';
+    src: url('../fonts/ubuntu-bold/Ubuntu-Bold.eot');
+    src: url('../fonts/ubuntu-bold/Ubuntu-Bold.?#iefix') format('embedded-opentype'),
+         url('../fonts/ubuntu-bold/Ubuntu-Bold.woff2') format('woff2'),
+         url('../fonts/ubuntu-bold/Ubuntu-Bold.woff') format('woff'),
+         url('../fonts/ubuntu-bold/Ubuntu-Bold.ttf') format('truetype'),
+         url('../fonts/ubuntu-bold/Ubuntu-Bold.svg#Ubuntu-Bold') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+/** Fonts Ends Here **/
+
+/** root css starts here **/
+
+div#root p a {
+    transition: all .3s ease;
+}
+
+div#root p a:hover {
+    color:#8e50ff;
+    text-decoration: none;
+}
+
+/** root css ends here **/
