@@ -25,15 +25,18 @@
     <script type="text/javascript">
       const form = document.getElementById('google-form')
       const frame = document.getElementById('google-frame')
+      const button = form.querySelector('button')
       
       form.addEventListener('submit', () => {
-        const button = form.querySelector('button')
-        //button.disabled = true
+        button.disabled = true
         button.innerText = 'Working...'
       })
       
+      let loaded = 0
       frame.addEventListener('load', () => {
-        console.log('loaded')
+        if (loaded++ > 0) {
+          button.innerText = 'Success'
+        }
       })
     </script>
   </body>
