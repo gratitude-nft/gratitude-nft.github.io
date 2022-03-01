@@ -13,7 +13,7 @@ jQuery( document ).ready(function() {
     //   }
     // }
 
-    jQuery('#presale-page .they-can-mint').hide();
+    jQuery('#presale-page .they-can-mint').hide();  
 
     jQuery('.collection-slider').slick({
         arrows: false,
