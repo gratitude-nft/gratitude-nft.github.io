@@ -13,6 +13,8 @@ jQuery( document ).ready(function() {
     //   }
     // }
 
+    jQuery('#presale-page .no-can-mint').hide();
+
     jQuery('.collection-slider').slick({
         arrows: false,
         autoplay: true,
