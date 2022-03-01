@@ -12,7 +12,7 @@ header#site-header {
     transition: all .3s ease;
     width: 100%;
     z-index: 2;
-}
+} 
 
 header.sticky {
     position: fixed;
