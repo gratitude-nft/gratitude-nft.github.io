@@ -362,7 +362,7 @@ footer#site-footer p a:hover {
 
 .gnft-pa-section h1 {
     color: #0a0a0a;
-    font-family: 'rajdhani-bold';
+    font-family: 'alegreya-sans-sc-black';
     font-size: 42px;
     line-height: 1.4;
     text-transform: uppercase;
@@ -373,6 +373,15 @@ footer#site-footer p a:hover {
     font-family: 'poppins-regular';
     font-size: 16px;
     line-height: 1.8;
+}
+
+.gnft-pa-section .no-can-mint img {
+    width: 120px;
+}
+
+.gnft-pa-section .no-can-mint {
+    padding-top: 40px;
+    padding-bottom: 80px;
 }
 
 /** PResale Page Ends Here **/
