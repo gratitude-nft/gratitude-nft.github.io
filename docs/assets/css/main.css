@@ -962,6 +962,13 @@ footer#site-footer p a:hover {
 
 }
 
+@media only screen and (max-width: 768px) {
+    #gnft-banner {
+        padding: 60px 15px;
+        background: url("../images/gratitudenft-banner-mobile.png");
+    }
+}
+
 @media only screen and (max-width: 767px) {
     .global-padding {
         padding: 60px 0; 
