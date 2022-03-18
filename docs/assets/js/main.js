@@ -17,8 +17,8 @@ jQuery( document ).ready(function() {
 
 
     // if(jQuery.cookie('presalecookie') == 1) {
-    //   jQuery('#presale-page .they-can-mint').hide();
-    //   jQuery('#presale-page .no-can-mint').show();
+    //   jQuery('#presale-page .they-can-mint').show();
+    //   jQuery('#presale-page .no-can-mint').hide();
     // }
     // else {
     //   jQuery('#presale-page .they-can-mint').show();
