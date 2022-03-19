@@ -1,0 +1,18 @@
+{
+  "CONTRACT_ADDRESS": "0x641475850e0316220a2D7E902508E08F72848316",
+  "SCAN_LINK": "https://etherscan.io/address/0x641475850e0316220a2D7E902508E08F72848316",
+  "NETWORK": {
+    "NAME": "Ethereum",
+    "SYMBOL": "ETH",
+    "ID": 1
+  },
+  "NFT_NAME": "Gratitude Gang ",
+  "SYMBOL": "GRATITUDE",
+  "MAX_SUPPLY": 2222,
+  "WEI_COST": 80000000000000000,
+  "DISPLAY_COST": 0.08,
+  "GAS_LIMIT": 285000,
+  "MARKETPLACE": "Opensea",
+  "MARKETPLACE_LINK": "https://opensea.io/collection/gratitudegang",
+  "SHOW_BACKGROUND": false
+} 
