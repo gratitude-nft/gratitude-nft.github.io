@@ -6,6 +6,10 @@ html {
     overflow-x: hidden;
 }
 
+#mint-page .they-can-mint {
+    display: none;
+}
+
 header#site-header {
     background-color: #ffffff;
     padding: 20px 15px;
