@@ -27,6 +27,8 @@ jQuery( document ).ready(function() {
 
     jQuery('#presale-page .they-can-mint').show();
     jQuery('#presale-page .no-can-mint').hide();
+
+    jQuery('#public-sale-mint').show();
     
 
     jQuery('.collection-slider').slick({
