@@ -25,11 +25,11 @@ jQuery( document ).ready(function() {
     //   jQuery('#presale-page .no-can-mint').hide();
     // }
 
-    jQuery('#presale-page .they-can-mint').show();
-    jQuery('#presale-page .no-can-mint').hide();
+    jQuery('#presale-page .they-can-mint').hide();
+    jQuery('#presale-page .no-can-mint').show();
 
-    jQuery('#mint-page .they-can-mint').hide();
-    jQuery('#mint-page  .no-can-mint').show();
+    jQuery('#mint-page .they-can-mint').show();
+    jQuery('#mint-page  .no-can-mint').hide();
     
     jQuery('.collection-slider').slick({
         arrows: false,
