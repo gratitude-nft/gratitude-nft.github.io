@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Mint a Gratitude Gang NFT</title>
+    <meta name="description" content="Gratitude Gang is the first NFT project powered by GRATITUDE, driven by SOCIAL IMPACT, and good for overall WELL-BEING." />
+    <meta property="og:title" content="Mint a Gratitude Gang NFT" />
+    <meta property="og:image" content="//www.gratitudegang.io/images/logo-banner.jpg" />
+    <meta property="og:url" content="//www.gratitudegang.io/" />
+    <meta property="og:type" content="website" />
+
+    <link rel="shortcut icon" href="/images/icon.png" type="image/x-icon" />
+    <link rel="icon" href="/images/icon.png" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v1" />
+    <link rel="stylesheet" type="text/css" href="/styles/mint.css?v1" />
+  </head>
+  <body>
+    <header class="head">
+      <nav class="left"><a class="logo" href="/"><img src="/images/logo.png" /></a></nav>
+      <nav class="right">
+        <a href="/#roadmap">Roadmap</a>
+        <a href="/#team">Team</a>
+        <a class="btn-outline-primary" href="/mint.html">Mint Now</a>
+        <a class="social image" href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+          <img src="/images/social-opensea-icon.svg" />
+        </a>
+        <a class="social" href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+          <i class="fab fa-ethereum"></i>
+        </a>
+        <a class="social" href="https://www.twitter.com/gratitudenft/" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a class="social" href="https://www.instagram.com/gratitudegangnft/" target="_blank">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a class="social" href="https://discord.gg/XEM7NPd6xd" target="_blank">
+          <i class="fab fa-discord"></i>
+        </a>
+        <a class="social" href="https://github.com/gratitude-nft" target="_blank">
+          <i class="fab fa-github"></i>
+        </a>
+      </nav>
+    </header>
+    <main class="body">
+      <section class="section section-1">
+        <img src="/images/mint/minting-icon.png" />
+        <h1>Mint your Gratitude Gang NFT!</h1>
+        <div class="status" data-do="status"></div>
+        <div class="price">
+          1 Gratitude Gang (GRATITUDE) NFT costs 0.08 ETH excluding gas fees.
+        </div>
+      </section>
+      <section class="section section-2">
+        <div id="disconnected">
+          <a class="btn btn-primary" data-do="connect" data-on="click" href="javascript:void(0)">
+            Connect Your Ethereum Wallet
+          </a>
+        </div>
+        <div id="connected">
+          <form id="form-mint">
+            <h3>How many to mint?</h3>
+            <div class="form-row">
+              <button type="button" class="btn btn-primary" data-do="decrease-amount" data-on="click">-</button>
+              <input id="amount" type="text" value="1" readonly />
+              <button type="button" class="btn btn-primary" data-do="increase-amount" data-on="click">+</button>
+            </div>
+            <div class="subtotal">Ξ 0.08 ETH</div>
+            <button class="btn btn-primary" type="submit">Mint Now</button>
+          </form>
+        </div>
+      </section>
+      <section class="section section-3">
+        <nav class="proof">
+          <a href="https://opensea.io/collection/gratitudegang" target="_blank">
+            <span class="circle image">
+              <img src="/images/social-opensea-icon.svg" />
+            </span>
+            <span class="action">
+              <small>View On</small>
+              <strong>OpenSea</strong>
+            </span>
+          </a>
+          <a href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+            <span class="circle">
+              <i class="fab fa-ethereum"></i>
+            </span>
+            <span class="action">
+              <small>Verify On</small>
+              <strong>Etherscan</strong>
+            </span>
+          </a>
+          <a href="https://github.com/gratitude-nft/contracts/blob/main/contracts/GratitudeGang.sol" target="_blank">
+            <span class="circle">
+              <i class="fab fa-github"></i>
+            </span>
+            <span class="action">
+              <small>Contracts On</small>
+              <strong>Github</strong>
+            </span>
+          </a>
+        </nav>
+      </section>
+      <section class="section section-4">
+        <div class="container">
+          <h2>Frequently Asked Questions</h2>
+          <h3>What is an NFT?</h3>
+          <p>
+            An NFT, or Non-Fungible Token, transform digital works of art 
+            and other collectibles into one-of-a-kind, verifiable assets 
+            that are easy to trade on the blockchain. In other words, 
+            they're like collectible baseball cards that go up and down 
+            in value do to the rarity of the art, the access to utilities 
+            (benefits) that can be used in the real world (or the metaverse) 
+            and serve as "tickets" to events involving the community.
+          </p>
+          <h3>What does it mean to MINT?</h3>
+          <p>
+            To "mint" means your digital art becomes a part of the Ethereum 
+            blockchain - a public ledger that is unchangeable and tamper-proof.
+          </p>
+          <h3>What is the focus of this project?</h3>
+          <p>
+            GRATITUDE GANG is the first NFT collection powered by GRATITUDE, 
+            driven by SOCIAL IMPACT, and good for overall WELL-BEING. Our 
+            aim as a project and as community is to be the champions of 
+            positivity, service, and personal growth both in the METAVERSE 
+            and especially IN REAL LIFE.
+          </p>
+          <h3>Are more NFTs released in the future?</h3>
+          <p>
+            YES. We're here for the long game. This is the first project 
+            and features an artist from the Philippines. We will be 
+            collaborating with artists from all over the world including 
+            Kenya, Nepal, Romania, and more. Stay Tuned!
+          </p>
+          <h3>Where is my NFT stored and will it be there permanently?</h3>
+          <p>
+            It will "live" in OpenSea. Make sure to start an account by 
+            going to the website www.opensea.io
+          </p>
+          <h3>Do I own the NFT after minting?</h3>
+          <p>
+            YES. You're GRATITUDE GANG sunflower is yours until you decide 
+            to sell it on the opensea market. But then again, WHY WOULD YOU?
+          </p>
+          <h3>How many NFTs will be available?</h3>
+          <p>
+            The will be 2,222 unique sunflowers available during this 
+            initial launch.
+          </p>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">
+      <h3>Follow Us</h3>
+      <a class="social image" href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+        <img src="/images/social-opensea-icon.svg" />
+      </a>
+      <a class="social" href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+        <i class="fab fa-ethereum"></i>
+      </a>
+      <a class="social" href="https://www.twitter.com/gratitudenft/" target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a class="social" href="https://www.instagram.com/gratitudegangnft/" target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a class="social" href="https://discord.gg/XEM7NPd6xd" target="_blank">
+        <i class="fab fa-discord"></i>
+      </a>
+      <a class="social" href="https://github.com/gratitude-nft" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+      <div class="masthead">
+        <a href="/terms-of-use.html">Terms and Conditions</a>
+        | <a href="/privacy-policy.html">Privacy Policy</a>
+        <div>
+          Proudly made in the Philippines
+        </div>
+      </div>
+    </footer>
+    <script src="//cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script type="text/javascript" src="/scripts/lib/doon.js"></script>
+    <script type="text/javascript" src="/scripts/lib/blockapi.js"></script>
+    <script type="text/javascript" src="/scripts/lib/notify.js"></script>
+    <script type="text/javascript" src="/scripts/contracts-mainnet.js?v1"></script>
+    <script type="text/javascript" src="/scripts/mint.js?v1"></script>
+  </body>
+</html>

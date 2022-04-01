@@ -1,0 +1,158 @@
+.section-1 {
+  text-align: center;
+}
+
+.section-1 img {
+  width: 120px;
+}
+
+.section-1 .status {
+  color: #9456FF;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.section-1 .price {
+  padding: 40px 0 20px;
+}
+
+.section-2 {
+  text-align: center;
+}
+
+.section-2 #connected {
+  display: none;
+}
+
+.section-2 #form-mint h3 {
+  margin: 0 0 20px;
+}
+
+.section-2 #form-mint {
+  border: 1px solid #CCCCCC;
+  border-radius: 20px;
+  margin: auto;
+  padding: 30px;
+  width: 250px;
+}
+
+.section-2 .form-row {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.section-2 .btn {
+  padding: 15px 40px;
+}
+
+.section-2 .btn[type=button] {
+  border-radius: 50%;
+  font-weight: bold;
+  height: 40px;
+  padding: 0;
+  width: 40px;
+}
+
+.section-2 #amount {
+  border: 0;
+  display: inline-block;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  width: 40px;
+}
+
+.section-2 .subtotal {
+  padding: 10px 0;
+}
+
+.section-3 {
+  padding: 60px 0;
+}
+
+.section-3 .proof {
+  display: flex;
+  justify-content: center;
+}
+
+.section-3 .proof a {
+  text-decoration: none;
+  width: 170px;
+}
+
+.section-3 .proof .circle {
+  background-color: #FFA800;
+  border-radius: 50%;
+  color: #FFFFFF;
+  font-size: 30px;
+  float: left;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  width: 60px;
+}
+
+.section-3 .proof .circle img {
+  width: 100%;
+}
+
+.section-3 .proof .action {
+  display: block;
+  padding: 5px 0 0 70px;
+}
+
+.section-3 .proof .action strong {
+  display: block;
+}
+
+.section-4 {
+  background-color: #F4E8DA;
+  padding: 40px 0;
+}
+
+.section-4 .container {
+  max-width: 650px;
+}
+
+.section-4 h2 {
+  text-transform: uppercase;
+}
+
+.section-4 h3 {
+  margin: 40px 0 0;
+}
+
+.section-4 p {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+@media(max-width: 530px) {
+  .section-1 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .section-3 .proof {
+    display: block;
+    margin: auto;
+    width: 170px;
+  }
+
+  .section-3 .proof a {
+    display: block;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 60px;
+  }
+
+  .section-3 .proof a::after {
+    clear: both;
+  }
+
+  .section-4 {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}

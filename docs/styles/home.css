@@ -1,0 +1,106 @@
+.section .container {
+  max-width: 650px;
+}
+
+.section-1 {
+  background-image: url(/images/home/home-banner.png);
+  background-size: cover;
+  background-position: left center;
+  height: 300px;
+  padding: 150px 20px;
+  position: relative;
+}
+
+.section-1 .hero {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  opacity: 0.85;
+  padding: 20px;
+  position: absolute;
+  right: 40px;
+  text-align: center;
+  max-width: 650px;
+}
+
+.section-1 .hero p {
+  font-size: 16px;
+}
+
+.section-1 .hero .btn {
+  padding: 20px 60px;
+}
+
+.section-2 {
+  background-color: #F4E8DA;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.section-2 p {
+  font-size: 16px;
+  line-height: 30px;
+  padding-top: 0;
+}
+
+.section-2 img {
+  margin-top: 80px;
+  width: 80px;
+}
+
+.section-3 {
+  text-align: center;
+}
+
+.section-3 h2 {
+  text-transform: uppercase;
+}
+
+.section-3 h6 {
+  font-size: 14px;
+  margin: 0;
+}
+
+.section-3 h2 strong {
+  display: block;
+  font-size: 40px;
+}
+
+.section-3 em {
+  font-size: 12px;
+}
+
+.section-3 p {
+  font-size: 16px;
+  margin: auto;
+  max-width: 650px;
+  padding: 20px;
+  text-align: center;
+}
+
+.section-3 img {
+  max-width: 150px;
+}
+
+.section-3 .team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 40px auto;
+  max-width: 700px;
+}
+
+.section-3 .team .member {
+  margin: 0 10px 40px;
+  width: 200px;
+}
+
+@media(max-width: 767px) {
+  .section-1 {
+    padding: 100px 20px;
+    height: 300px;
+  }
+  .section-1 .hero {
+    opacity: 0.90;
+    position: static;
+  }
+}
