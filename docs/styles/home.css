@@ -51,6 +51,10 @@
   text-align: center;
 }
 
+.section-3 .container {
+  max-width: 700px;
+}
+
 .section-3 h2 {
   text-transform: uppercase;
 }
