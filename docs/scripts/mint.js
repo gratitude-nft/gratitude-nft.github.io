@@ -27,7 +27,7 @@
   form.addEventListener('submit', async(e) => {
     e.preventDefault()
 
-    if (state.balance > 4) {s
+    if (state.balance > 4) {
       blockapi.notify('error', 'You have minted the maximum amount')
       return
     }
