@@ -52,10 +52,10 @@
       return true
     })
 
-    matches.forEach(metadata => {
+    matches.sort(() => Math.random() - 0.5).forEach(metadata => {
       results.appendChild(toElement(tplResultItem
         .replace('{INDEX}', metadata.index)
-        .replace('{NAME}', metadata.name)
+        .replace('{NAME}', metadata.name.replace(/\#[0-9]+/, ''))//todo remove replace
         .replace('{IMAGE}', `/images/collection/${metadata.index + 1}.png`) //metadata.preview || metadata.image
       ))
     })
@@ -164,7 +164,7 @@
     })
 
     const modal = toElement(tplModal
-      .replace('{NAME}', metadata.name)
+      .replace('{NAME}', metadata.name.replace(/\#[0-9]+/, ''))//todo remove replace
       .replace('{IMAGE}', `/images/collection/${index + 1}.png`)//metadata.preview || metadata.image
       .replace('{RANK}', '')
       .replace('{RATING}', '')

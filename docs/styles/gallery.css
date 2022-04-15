@@ -132,13 +132,13 @@ h1 {
 
 .modal .info {
   flex-grow: 1;
-  padding-left: 20px;
   text-align: center;
 }
 
 .modal .attributes {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .modal .attribute-box {
@@ -177,18 +177,36 @@ h1 {
     justify-content: center;
     padding-left: 0;
   }
+
+  .gallery .results .item {
+    height: auto;
+    width: calc(33% - 10px);
+  }
+
+  .gallery .results .item .preview {
+    border-radius: 0;
+    box-shadow: none;
+    height: auto;
+    width: auto;
+  }
 }
 
 @media(max-width: 560px) {
   .gallery .results .item {
-    height: auto;
-    width: calc(50% - 20px);
+    width: calc(50% - 10px);
   }
 
   .gallery .results .item .preview {
-    box-shadow: none;
     height: auto;
     overflow: visible;
     width: 100%;
+  }
+
+  .modal {
+    display: block;
+  }
+
+  .modal .attribute-box {
+    width: 120px;
   }
 }
