@@ -73,6 +73,7 @@
   }
 
   const populate = async function() {
+    if (populated) return
     items.innerHTML = ''
     const template = document.getElementById('tpl-item').innerHTML
     for (let i = 0; true; i++) {
@@ -104,6 +105,7 @@
           .replace('{SUPPLY}', info.supply)
           .replace('{SUPPLY}', info.supply)
         )
+        populated = true
 
         items.appendChild(item)
       } catch(e) {
@@ -114,6 +116,7 @@
   }
   
   let isConnected = false
+  let populated = false
   const store = blockapi.contract('store')
   const token = blockapi.contract('token')
   const state = { connected: false }
