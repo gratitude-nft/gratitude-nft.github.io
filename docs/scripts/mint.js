@@ -88,19 +88,7 @@
 
   window.addEventListener('status-init', async(e) => {
     const supply = await blockapi.read(nft, 'totalSupply')
-    if (!window.localStorage) {
-      e.for.innerHTML = `${supply} / 2,222`
-      return
-    }
-    let count = parseInt(localStorage.getItem('minted') || '0')
-    const interval = setInterval(() => {
-      if (count >= supply) {
-        e.for.innerHTML = `${supply} / 2,222`
-        return clearInterval(interval)
-      }
-      e.for.innerHTML = `${++count} / 2,222`
-      localStorage.setItem('minted', count)
-    }, 2000);
+    e.for.innerHTML = `${supply} / 2,222`
   })
 
   window.addEventListener('connect-click', () => {

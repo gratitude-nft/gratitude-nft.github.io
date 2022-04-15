@@ -28,6 +28,23 @@ window.blockapi = {
     return rpc.send(params)
   },
 
+  watch(blockmetadata, address, type, symbol, decimals, image) {
+    this.connect(blockmetadata, async () => {
+      await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type,
+          options: {
+            address: address, // The address that the token is at.
+            symbol: symbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: decimals, // The number of decimals in the token
+            image: image, // A string url of the token logo
+          },
+        },
+      })
+    }, () => {})
+  },
+
   toEther(num, format) {
     const libWeb3 = this.web3()
     if (format === 'string') {

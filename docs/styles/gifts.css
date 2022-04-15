@@ -1,0 +1,121 @@
+#connected {
+  display: none;
+}
+
+#disconnected .btn {
+  padding: 15px 40px;
+}
+
+.section-1 {
+  background-color: #F4E8DA;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.section-1 h1 {
+  margin: 0;
+}
+
+.section-1 p {
+  padding-bottom: 0;
+}
+
+.section-1 .note {
+  color: #DF0000;
+}
+
+.section-2 {
+  padding: 20px;
+}
+
+.section-2 .items {
+  max-width: 700px;
+  margin: auto;
+  width: 100%;
+}
+
+.section-2 .alert {
+  text-align: center;
+}
+
+.section-2 .item {
+  border-bottom: 1px solid #EDEDED;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.section-2 .item::after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 1px;
+  width: 1px;
+}
+
+.section-2 .item .preview {
+  float: left;
+  width: 200px;
+}
+
+.section-2 .item .preview img {
+  width: 100%;
+}
+
+.section-2 .item .info {
+  padding: 10px 0 0 220px;
+}
+
+.section-2 .item .info h3 {
+  margin: 0;
+}
+
+.section-2 .item .info p {
+  padding: 0;
+}
+
+.section-2 .item .info .supply {
+  font-size: 13px;
+  margin-top: 20px;
+}
+
+.section-2 .item .info .actions {
+  margin-top: 20px;
+}
+
+.section-2 .item .info .btn {
+  border-radius: 0;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.section-2 .item .info .btn.hide {
+  display: none;
+}
+
+.section-2 .item .info .btn.disabled {
+  background-color: #FFFFFF;
+  border: 1px solid #9456FF;
+  color: #9456FF;
+}
+
+@media(max-width: 767px) {
+  .section-2 .item .info .btn {
+    display: block;
+  }
+}
+
+@media(max-width: 530px) {
+  .section-2 .item .preview {
+    float: none;
+    margin: auto;
+  }
+
+  .section-2 .item .info {
+    padding: 10px 0 0 20px;
+  }
+
+  .section-2 .item {
+    display: block;
+  }
+}

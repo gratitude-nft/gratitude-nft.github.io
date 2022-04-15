@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Gratitude Gang Gallery</title>
+    <meta property="og:title" content="Gratitude Gang Gallery" />
+    <meta property="og:image" content="//www.gratitudegang.io/images/logo-banner.jpg" />
+    <meta property="og:url" content="//www.gratitudegang.io/gallery" />
+    <meta property="og:type" content="website" />
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v3" />
+    <link rel="stylesheet" type="text/css" href="/styles/gallery.css?v3" />
+  </head>
+  <body>
+    <header class="head">
+      <nav class="left"><a class="logo" href="/"><img src="/images/logo.png" /></a></nav>
+      <nav class="right">
+        <a href="/#about">About</a>
+        <a href="/gallery.html">Gallery</a>
+        <a href="/stake.html">Staking</a>
+        <a href="/gifts.html">Gifts</a>
+        <a class="btn btn-outline-primary" href="/mint.html">Mint Now</a>
+        <a class="btn btn-primary" href="https://discord.gg/XEM7NPd6xd" target="_blank">
+          <i class="fab fa-discord"></i>
+          Discord
+        </a>
+      </nav>
+    </header>
+    <main class="body">
+      <h1>Gallery</h1>
+      <div class="gallery">
+        <aside class="filters">
+          <div class="series">
+            <h4 class="toggleable" data-do="toggle" data-on="click">Series</h4>
+            <div class="options"></div>
+          </div>
+          <div class="attributes">
+            <div class="options"></div>
+          </div>
+        </aside>
+        <main class="results"></main>
+      </div>
+    </main>
+    <section class="newsletter">
+      <div class="container">
+        <h2>Subscribe to our Newsletter</h2>
+        <p>Stay up to date with our latest news.</p>
+        <form id="google-form" method="post" action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSd2rvQZ3p8ZP-ZeCKYosGJ1rSPk9pSpUbonPmdCb1PBAgV8fg/formResponse" target="google-frame">
+          <input type="text" placeholder="Email Address" name="entry.2133371847" class="input-email" autocomplete="off" required="" />
+          <button type="submit" disabled="">Submit</button>
+          <input type="hidden" name="fvv" value="1" />
+          <input type="hidden" name="partialResponse" value='[null,null,"3959340023712340621"]' />
+          <input type="hidden" name="pageHistory" value="0"><input type="hidden" name="fbzx" value="6146473985013413622" />
+        </form>
+      </div>
+      <iframe id="google-frame" name="google-frame" src="/_blank.html"></iframe>
+    </section>
+    <footer class="foot">
+      <h3>Follow Us</h3>
+      <a class="social image" href="https://opensea.io/collection/gratitudegang" target="_blank">
+        <img src="/images/social-opensea-icon.svg" />
+      </a>
+      <a class="social" href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+        <i class="fab fa-ethereum"></i>
+      </a>
+      <a class="social" href="https://www.twitter.com/gratitudenft/" target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a class="social" href="https://www.instagram.com/gratitudegangnft/" target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a class="social" href="https://discord.gg/XEM7NPd6xd" target="_blank">
+        <i class="fab fa-discord"></i>
+      </a>
+      <a class="social" href="https://github.com/gratitude-nft" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+      <div class="masthead">
+        <a href="/terms-of-use.html">Terms and Conditions</a>
+        | <a href="/privacy-policy.html">Privacy Policy</a>
+        <div>
+          Proudly made in the Philippines
+        </div>
+      </div>
+    </footer>
+    <template id="template-form-fieldset">
+      <div class="form-fieldset">
+        <h5 class="toggleable" data-do="toggle" data-on="click">{LEGEND}</h5>
+        <div class="fields"></div>
+      </div>
+    </template>
+    <template id="template-form-row">
+      <div class="form-row">
+        <label>
+          <input data-do="filter" data-on="click" type="checkbox" name="{NAME}" value="{VALUE}" />
+          <span class="label">
+            {LABEL}
+            <span class="badge">{COUNT}</span>
+          </span>
+        </label>
+      </div>
+    </template>
+    <template id="template-result-item">
+      <div class="item" data-do="modal-open" data-on="click" data-index="{INDEX}">
+        <div class="preview">
+          <img src="{IMAGE}" loading="lazy" />
+        </div>
+        <h6>{NAME}</h6>
+      </div>
+    </template>
+    <template id="template-modal">
+      <div class="modal" data-do="modal-close" data-on="click">
+        <div class="overlay">
+          <div class="preview">
+            <img src="{IMAGE}" loading="lazy" />
+          </div>
+          <div class="info">
+            <h3>{NAME}</h3>
+            <div class="attributes">{ATTRIBUTES}</div>
+          </div>
+        </div>
+      </div>
+    </template>
+    <template id="template-attribute-box">
+      <div class="attribute-box">
+        <h6>{NAME}</h6>
+        <span>{VALUE}</span>
+        <p>{PERCENT}% have this trait</p>
+      </div>
+    </template>
+    <script src="/scripts/lib/doon.js"></script>
+    <script src="/scripts/lib/notify.js"></script>
+    <script src="/scripts/newsletter.js"></script>
+    <script src="/scripts/gallery.js?v3"></script>
+  </body>
+</html>

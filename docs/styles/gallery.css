@@ -1,0 +1,194 @@
+h1 {
+  margin: 0;
+  padding: 0 20px;
+}
+
+.gallery {
+  display: flex;
+  padding: 0 20px;
+}
+
+.gallery .results {
+  padding-left: 20px;
+}
+
+.gallery .results::after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 1px;
+  width: 1px;
+}
+
+.gallery .results .item {
+  float: left;
+  height: 300px;
+  margin: 5px;
+  width: 250px;
+}
+
+.gallery .results .item .preview {
+  border-radius: 20px;
+  box-shadow: 1px 1px 1px #DDDDDD;
+  height: 250px;
+  overflow: hidden;
+  width: 250px;
+}
+
+.gallery .results .item .preview img {
+  width: 100%;
+}
+
+.gallery .results .item h6 {
+  font-size: 12px;
+  font-weight: normal;
+  margin: 10px 0;
+  padding: 0;
+  text-align: center;
+}
+
+.gallery .filters {
+  min-width: 250px;
+  padding-bottom: 20px;
+}
+
+.gallery .toggleable {
+  border-bottom: 1px solid #EDEDED;
+  padding-bottom: 20px;
+  position: relative;
+}
+
+.gallery .toggleable::after {
+  content: "\f053";
+  display: block;
+  font-family: "Font Awesome 6 Free";
+  font-size: 14px;
+  float: right;
+  margin-top: 3px;
+}
+
+.gallery .toggleable.open::after {
+  content: "\f078";
+}
+
+.gallery .series .options {
+  display: none;
+}
+
+.gallery .attributes .fields {
+  display: none;
+}
+
+.gallery .form-row {
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.gallery .form-row label {
+  clear: both;
+  display: block;
+}
+
+.gallery .form-row label .badge {
+  background-color: #EEEEEE;
+  border-radius: 10px;
+  float: right;
+  font-size: 11px;
+  margin-top: -2px;
+  padding: 5px 10px;
+}
+
+.modal {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.65);
+  bottom: 0;
+  display: flex;
+  left: 0;
+  justify-content: center;
+  overflow: auto;
+  position: fixed;
+  right: 0;
+  top: 0;
+}
+
+.modal .overlay {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  margin: 0 auto;
+  max-width: 600px;
+  padding: 20px;
+}
+
+.modal .preview {
+  border-radius: 20px;
+  margin: auto;
+  overflow: hidden;
+  width: 300px;
+}
+
+.modal .preview img {
+  width: 100%;
+}
+
+.modal .info {
+  flex-grow: 1;
+  padding-left: 20px;
+  text-align: center;
+}
+
+.modal .attributes {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.modal .attribute-box {
+  background-color: #F4E8DA;
+  border: 1px solid #EDEDED;
+  border-radius: 10px;
+  margin: 5px;
+  padding: 10px;
+  width: 150px;
+}
+
+.modal .attribute-box h6 {
+  font-size: 11px;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.modal .attribute-box span {
+  display: block;
+  font-size: 13px;
+  padding: 10px 0;
+}
+
+.modal .attribute-box p {
+  font-size: 11px;
+  color: #666666;
+  margin: 0;
+}
+
+@media(max-width: 830px) {
+  .gallery {
+    display: block;
+  }
+
+  .gallery .results {
+    justify-content: center;
+    padding-left: 0;
+  }
+}
+
+@media(max-width: 560px) {
+  .gallery .results .item {
+    height: auto;
+    width: calc(50% - 20px);
+  }
+
+  .gallery .results .item .preview {
+    box-shadow: none;
+    height: auto;
+    overflow: visible;
+    width: 100%;
+  }
+}
