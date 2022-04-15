@@ -1,13 +1,21 @@
 (async() => {
   const connected = function(newstate) {
     Object.assign(state, newstate, { connected: true })
+    document.getElementById('disconnected').style.display = 'none'
     blockapi.notify('success', 'Wallet connected')
+
+    if (!isConnected) {
+      isConnected = true
+      populate()
+    }
   }
 
   const disconnected = function(e) {
     if (e?.message) {
       blockapi.notify('error', e.message)
     } else {
+      isConnected = false
+      document.getElementById('disconnected').style.display = 'block'
       blockapi.notify('success', 'Wallet disconnected')
     }
   }
@@ -65,7 +73,6 @@
   }
 
   const populate = async function() {
-    const items = document.querySelector('div.items')
     items.innerHTML = ''
     const template = document.getElementById('tpl-item').innerHTML
     for (let i = 0; true; i++) {
@@ -103,14 +110,14 @@
         break
       }
     }
-
     window.doon('div.items')
   }
-
-  const BN = blockapi.web3().utils.BN
+  
+  let isConnected = false
   const store = blockapi.contract('store')
   const token = blockapi.contract('token')
   const state = { connected: false }
+  const items = document.querySelector('div.items')
 
   window.addEventListener('connect-click', () => {
     if (!state.account) {
@@ -211,6 +218,16 @@
     )
   })
 
-  populate()
+  if (window.ethereum?.request) {
+    try {//matching network
+      const networkId = await window.ethereum.request({ method: 'net_version' });
+      if (networkId == blockmetadata.chain_id) {
+        populate()
+      } else {
+        items.innerHTML = ''
+      }
+    } catch (e) {}
+  }
+
   window.doon('body')
 })()

@@ -132,6 +132,7 @@ window.blockapi = {
 
       return state
     }
+
     const validate = async(action, param) => {
       if (action === 'accountsChanged') {
         if (!Array.isArray(param) || param.length === 0) {
