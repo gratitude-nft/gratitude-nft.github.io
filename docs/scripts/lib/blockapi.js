@@ -18,6 +18,13 @@ window.blockapi = {
     })
   },
 
+  async estimateGas(contract, account, gasLimit, method, value, ...args) {
+    const params  = { from: account, gas: gasLimit }
+    if (value) params.value = value
+    const rpc = contract.methods[method](...args)
+    return await rpc.estimateGas(params)
+  },
+
   send(contract, account, method, value, ...args) {
     const params = {
       to: contract.address,

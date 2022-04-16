@@ -29,11 +29,35 @@
 
     if (state.balance > 4) {
       blockapi.notify('error', 'You have minted the maximum amount')
-      return
+      return false
     }
 
     //get price
     const price = blockapi.toWei(amount.value * 0.08)
+
+    //gas check
+    try {
+      await blockapi.estimateGas(
+        nft, 
+        state.account, 
+        200000, 
+        'mint(uint256)', 
+        price, 
+        parseInt(amount.value)
+      )
+    } catch(e) {
+      const pattern = /have (\d+) want (\d+)/
+      const matches = e.message.match(pattern)
+      if (matches.length === 3) {
+        e.message = e.message.replace(pattern, `have ${
+          blockapi.toEther(matches[1], 'int').toFixed(5)
+        } ETH want ${
+          blockapi.toEther(matches[2], 'int').toFixed(5)
+        } ETH`)
+      }
+      blockapi.notify('error', e.message)
+      return false
+    }
 
     let rpc;
     try {
