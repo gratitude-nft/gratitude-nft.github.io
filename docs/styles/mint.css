@@ -67,6 +67,12 @@
   padding: 10px 0;
 }
 
+.section-2 .note {
+  margin-top: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
 .section-3 {
   padding: 60px 0;
 }

@@ -290,7 +290,7 @@ a, a:hover, a:active, a:visited {
   padding: 10px 30px;
 }
 
-@media(max-width: 767px) {
+@media(max-width: 820px) {
   .head {
     display: block;
   }
@@ -308,7 +308,7 @@ a, a:hover, a:active, a:visited {
   }
 }
 
-@media(max-width: 550px) {
+@media(max-width: 685px) {
   .head .right .btn {
     display: block;
     margin: 10px 0;

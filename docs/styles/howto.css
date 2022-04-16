@@ -1,0 +1,80 @@
+.nav-left aside {
+  float: left;
+  width: 250px
+}
+
+.nav-left aside a {
+  border: 1px solid #CCCCCC;
+  color: #CCCCCC;
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px 15px;
+  text-decoration: none;
+}
+
+.nav-left aside a.active {
+  border: 1px solid #777777;
+  color: #777777;
+}
+
+.nav-left aside a em {
+  display: block;
+  font-size: 12px;
+}
+
+.nav-left aside a span {
+  display: block;
+}
+
+.nav-left main {
+  padding-left: 270px;
+}
+
+.nav-left main .content {
+  display: none;
+}
+
+.nav-left main .content.active {
+  display: block;
+}
+
+.nav-left main .content h2 {
+  text-transform: uppercase;
+}
+
+.nav-left main .content p {
+  font-size: 15px;
+  line-height: 30px;
+}
+
+.nav-left main .content li {
+  font-size: 15px;
+  line-height: 30px;
+}
+
+.nav-left main .content blockquote {
+  border-left: 5px solid #666666;
+  color: #333333;
+  line-height: 26px;
+  margin: 10px 0;
+  padding: 5px 20px;
+}
+
+.nav-left main .content img {
+  border: 1px solid #666666;
+}
+
+@media(max-width: 420px) {
+  .nav-left aside {
+    float: none;
+    margin-bottom: 10px;
+    width: auto;
+  }
+  .nav-left aside a {
+    display: inline-block;
+    padding: 5px 10px;
+  }
+  .nav-left main {
+    padding-left: 0;
+  }
+}
