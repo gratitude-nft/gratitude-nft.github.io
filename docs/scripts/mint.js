@@ -55,7 +55,7 @@
           blockapi.toEther(matches[2], 'int').toFixed(5)
         } ETH`)
       }
-      blockapi.notify('error', e.message)
+      blockapi.notify('error', e.message.replace('err: i', 'I'))
       return false
     }
 
