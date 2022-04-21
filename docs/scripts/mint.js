@@ -1,21 +1,32 @@
 (async() => {
   const state = { connected: false }
-  const connected = async function(newstate) {
+  const connected = async function(newstate, session) {
     Object.assign(state, newstate, { connected: true })
-    blockapi.notify('success', 'Wallet connected')
+    if (!session) {
+      notify('success', 'Wallet connected')
+    }
     document.getElementById('connected').style.display = 'block'
     document.getElementById('disconnected').style.display = 'none'
+    const supply = await blockapi.read(nft, 'totalSupply')
+    document.querySelector('.status').innerHTML = `${supply} / 2,222`
     //get balance of wallet
     state.balance = parseInt(await blockapi.read(nft, 'balanceOf', state.account))
   }
 
-  const disconnected = function(e) {
+  const disconnected = async function(e, session) {
     if (e?.message) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
     } else {
-      blockapi.notify('success', 'Wallet disconnected')
+      if (!session) {
+        notify('success', 'Wallet disconnected')
+      }
       document.getElementById('connected').style.display = 'none'
       document.getElementById('disconnected').style.display = 'block'
+    }
+
+    if (await blockapi.inNetwork(blockmetadata)) {
+      const supply = await blockapi.read(nft, 'totalSupply')
+      document.querySelector('.status').innerHTML = `${supply} / 2,222`
     }
   }
 
@@ -28,7 +39,7 @@
     e.preventDefault()
 
     if (state.balance > 4) {
-      blockapi.notify('error', 'You have minted the maximum amount')
+      notify('error', 'You have minted the maximum amount')
       return false
     }
 
@@ -55,7 +66,7 @@
           blockapi.toEther(matches[2], 'int').toFixed(5)
         } ETH`)
       }
-      blockapi.notify('error', e.message.replace('err: i', 'I'))
+      notify('error', e.message.replace('err: i', 'I'))
       return false
     }
 
@@ -70,12 +81,12 @@
         parseInt(amount.value)
       )
     } catch(e) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
       return false
     }
 
     rpc.on('transactionHash', function(hash) {
-      blockapi.notify(
+      notify(
         'success', 
         `Transaction started on <a href="${blockmetadata.chain_scan}/tx/${hash}" target="_blank">
           etherscan.com
@@ -86,13 +97,13 @@
 
     rpc.on('confirmation', function(confirmationNumber, receipt) {
       if (confirmationNumber > 10) return
-      blockapi.notify('success', `${confirmationNumber}/10 confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
+      notify('success', `${confirmationNumber}/10 confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
         etherscan.com
       </a>. Please stay on this page and wait for 10 confirmations...`, 1000000)
     })
 
     rpc.on('receipt', function(receipt) {
-      blockapi.notify(
+      notify(
         'success', 
         `Confirming on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
           etherscan.com
@@ -104,21 +115,14 @@
     try {
       await rpc
     } catch(e) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
     }
 
     return false
   })
 
-  window.addEventListener('status-init', async(e) => {
-    const supply = await blockapi.read(nft, 'totalSupply')
-    e.for.innerHTML = `${supply} / 2,222`
-  })
-
   window.addEventListener('connect-click', () => {
-    if (!state.account) {
-      return blockapi.connect(blockmetadata, connected, disconnected)
-    }
+    blockapi.connect(blockmetadata, connected, disconnected)
   })
 
   window.addEventListener('decrease-amount-click', () => {
@@ -138,4 +142,5 @@
   })
 
   window.doon('body')
+  blockapi.startSession(blockmetadata, connected, disconnected, true)
 })()

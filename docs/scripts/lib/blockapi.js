@@ -111,117 +111,128 @@ window.blockapi = {
     });
   },
 
-  connect(blockmetadata, connected, disconnected) {
-    const libWeb3 = this.web3()
-    const getState = async(account) => {
-      const state = { account }
-      if (Array.isArray(blockmetadata.contract?.abi)
-        && typeof blockmetadata.contract?.address === 'string'
-      ) {
-        state.contract = new libWeb3.eth.Contract(
-          blockmetadata.contract.abi,
-          blockmetadata.contract.address
-        )
-      }
-
-      if (typeof blockmetadata.contracts === 'object') {
-        for (const key in blockmetadata.contracts) {
-          if (Array.isArray(blockmetadata.contracts[key]?.abi)
-            && typeof blockmetadata.contracts[key]?.address === 'string'
-          ) {
-            state[key] = new libWeb3.eth.Contract(
-              blockmetadata.contracts[key].abi,
-              blockmetadata.contracts[key].address
-            )
-          }
-        }
-      }
-
-      return state
+  async inNetwork(blockmetadata) {
+    if (!(window.ethereum?.request)) {
+      return false
     }
+    
+    const networkId = await window.ethereum.request({ method: 'net_version' });
+    return networkId == blockmetadata.chain_id
+  },
 
-    const validate = async(action, param) => {
-      if (action === 'accountsChanged') {
-        if (!Array.isArray(param) || param.length === 0) {
+  async isConnected(blockmetadata) {
+    if (!(window.ethereum?.request)) return false
+
+    if (!(await this.inNetwork(blockmetadata))) return false
+    const accounts = await window.ethereum.request({ method: 'eth_accounts' })
+    return !!accounts.length
+  },
+
+  async startSession(blockmetadata, connected, disconnected, listen) {
+    if (listen) this.listenToWallet(blockmetadata, connected, disconnected)
+    if (await this.isConnected(blockmetadata)) {
+      const account = (await window.ethereum.request({ method: 'eth_accounts' }))[0]
+      return connected(await this._getState(account), true)
+    }
+    return disconnected(null, true)
+  },
+
+  listenToWallet(blockmetadata, connected, disconnected) {
+    if (window.ethereum?.isMetaMask && typeof window.__blockAPIListening === 'undefined') {
+      //window.ethereum.on('connect', validate.bind(null, 'connect'))
+      window.ethereum.on('disconnect', disconnected)
+      window.ethereum.on('chainChanged', async (params) => {
+        if (blockmetadata.chain_id !== parseInt(params, 16)) {
           return disconnected()
         }
-      }
-      if (!window.ethereum?.isMetaMask) {
-        return disconnected({ 
-          connected: false, 
-          message: 'Please install <a href="https://metamask.io/" target="_blank">MetaMask</a> and refresh this page.' 
-        })
-      }
-
-      try {//matching network and connecting
-        const account = await this.getWalletAddress()
-        const networkId = await window.ethereum.request({ method: 'net_version' });
-        if (networkId == blockmetadata.chain_id) {
-          return connected(await getState(account))
+        if (!this.isConnected(blockmetadata)) {
+          await connect(blockmetadata, connected, disconnected)
         }
-      } catch (e) {
-        return disconnected(e)
-      }
 
-      try {//auto switch network, then matching network and connecting
-        await this.switchNetwork(blockmetadata)
-        const account = await this.getWalletAddress()
-        const networkId = await window.ethereum.request({ method: 'net_version' });
-        if (networkId == blockmetadata.chain_id) {
-          return connected(await getState(account))
+      })
+      window.ethereum.on('accountsChanged', async (params) => {
+        if (!Array.isArray(params) || params.length === 0) {
+          return disconnected()
         }
-      } catch (e) {
-        return disconnected(e)
-      }
-
-      try {//adding network, auto switch network, then matching network and connecting
-        await this.addNetwork(blockmetadata)
-        await this.switchNetwork(blockmetadata)
-        const account = await this.getWalletAddress()
-        const networkId = await window.ethereum.request({ method: 'net_version' });
-        if (networkId == blockmetadata.chain_id) {
-          return connected(await getState(account))
+        if (!this.isConnected(blockmetadata)) {
+          await connect(blockmetadata, connected, disconnected)
         }
-      } catch (e) {
-        return disconnected(e)
-      }
-
-      return disconnected(e)
-    }
-
-    if (window.ethereum?.isMetaMask && typeof window.__blockAPIListening === 'undefined') {
-      window.ethereum.on('connect', validate.bind(null, 'connect'))
-      window.ethereum.on('disconnect', disconnected)
-      window.ethereum.on('chainChanged', validate.bind(null, 'chainChanged'))
-      window.ethereum.on('accountsChanged', validate.bind(null, 'accountsChanged'))
+      })
       window.__blockAPIListening = true
     }
 
-    validate('init')
+    return this
   },
 
-  notify(type, message, timeout = 5000) {
-    Array.from(document.querySelectorAll('div.notification')).forEach((notification) => {
-      if (notification.mounted) {
-        document.body.removeChild(notification)
-        notification.mounted = false
+  async connect(blockmetadata, connected, disconnected) {
+    if (!window.ethereum?.isMetaMask) {
+      return disconnected({ 
+        connected: false, 
+        message: 'Please install <a href="https://metamask.io/" target="_blank">MetaMask</a> and refresh this page.' 
+      })
+    }
+
+    try {//matching network and connecting
+      const account = await this.getWalletAddress()
+      const networkId = await window.ethereum.request({ method: 'net_version' });
+      if (networkId == blockmetadata.chain_id) {
+        return connected(await this._getState(account))
       }
-    })
-    const container = document.createElement('div')
-    container.className = `notification notification-${type}`
-    container.innerHTML = `<div>${message}</div>`
-    container.mounted = true
-    document.body.appendChild(container)
-    container.addEventListener('click', () => {
-      document.body.removeChild(container)
-      container.mounted = false
-    })
+    } catch (e) {
+      return disconnected(e)
+    }
+
+    try {//auto switch network, then matching network and connecting
+      await this.switchNetwork(blockmetadata)
+      const account = await this.getWalletAddress()
+      const networkId = await window.ethereum.request({ method: 'net_version' });
+      if (networkId == blockmetadata.chain_id) {
+        return connected(await this._getState(account))
+      }
+    } catch (e) {
+      return disconnected(e)
+    }
+
+    try {//adding network, auto switch network, then matching network and connecting
+      await this.addNetwork(blockmetadata)
+      await this.switchNetwork(blockmetadata)
+      const account = await this.getWalletAddress()
+      const networkId = await window.ethereum.request({ method: 'net_version' });
+      if (networkId == blockmetadata.chain_id) {
+        return connected(await this._getState(account))
+      }
+    } catch (e) {
+      return disconnected(e)
+    }
     
-    setTimeout(() => {
-      if (container.mounted) {
-        document.body.removeChild(container)
-        container.mounted = false
+    return disconnected(e)
+  },
+
+  async _getState(account) {
+    const libWeb3 = this.web3()
+    const state = { account }
+    if (Array.isArray(blockmetadata.contract?.abi)
+      && typeof blockmetadata.contract?.address === 'string'
+    ) {
+      state.contract = new libWeb3.eth.Contract(
+        blockmetadata.contract.abi,
+        blockmetadata.contract.address
+      )
+    }
+
+    if (typeof blockmetadata.contracts === 'object') {
+      for (const key in blockmetadata.contracts) {
+        if (Array.isArray(blockmetadata.contracts[key]?.abi)
+          && typeof blockmetadata.contracts[key]?.address === 'string'
+        ) {
+          state[key] = new libWeb3.eth.Contract(
+            blockmetadata.contracts[key].abi,
+            blockmetadata.contracts[key].address
+          )
+        }
       }
-    }, timeout)
+    }
+
+    return state
   }
 }

@@ -1,9 +1,16 @@
 (async() => {
-  const connected = async function(newstate) {
-    Object.assign(state, newstate, { connected: true })
-    blockapi.notify('success', 'Wallet connected')
+  const connected = async function(newstate, session) {
+    Object.assign(state, newstate, { 
+      connected: true,
+      rate: new BN(await blockapi.read(staking, 'TOKEN_RATE'))
+    })
+    //if first time connecting
+    if (!session) {
+      notify('success', 'Wallet connected')
+    }
     document.getElementById('connected').style.display = 'block'
     document.getElementById('disconnected').style.display = 'none'
+    
     //get NFTs owned and staked
     state.owned = await blockapi.read(staking, 'ownerTokens', state.account)
     state.owned = state.owned.map(id => parseInt(id)).filter(id => id > 0)
@@ -89,11 +96,14 @@
     window.doon('div.assets')
   }
 
-  const disconnected = function(e) {
+  const disconnected = function(e, session) {
     if (e?.message) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
     } else {
-      blockapi.notify('success', 'Wallet disconnected')
+      //if first time connecting
+      if (!session) {
+        notify('success', 'Wallet disconnected')
+      }
       document.getElementById('connected').style.display = 'none'
       document.getElementById('disconnected').style.display = 'block'
     }
@@ -104,7 +114,7 @@
       const rpc = blockapi.send(contract, state.account, method, value, ...args)
 
       rpc.on('transactionHash', function(hash) {
-        blockapi.notify(
+        notify(
           'success', 
           `Transaction started on <a href="${blockmetadata.chain_scan}/tx/${hash}" target="_blank">
             etherscan.com
@@ -116,19 +126,19 @@
       rpc.on('confirmation', function(confirmationNumber, receipt) {
         if (confirmationNumber > confirmations) return
         if (confirmationNumber == confirmations) {
-          blockapi.notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
+          notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
             etherscan.com
           </a>. Please stay on this page and wait for ${confirmations} confirmations...`)
           resolve()
           return
         }
-        blockapi.notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
+        notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
           etherscan.com
         </a>. Please stay on this page and wait for ${confirmations} confirmations...`, 1000000)
       })
 
       rpc.on('receipt', function(receipt) {
-        blockapi.notify(
+        notify(
           'success', 
           `Confirming on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
             etherscan.com
@@ -150,26 +160,25 @@
   const staking = blockapi.contract('staking')
   const token = blockapi.contract('token')
   const state = { 
-    connected: false, 
-    rate: new BN(await blockapi.read(staking, 'TOKEN_RATE')),
+    connected: false,
     staked: [],
     owned: []
   }
 
   window.addEventListener('stake-click', async(e) => {
-    return blockapi.notify('error', 'Staking is available after the reveal.')
+    return notify('error', 'Staking is available after the reveal.')
     //if disabled already
     if (e.for.classList.contains('disabled')) return
     const tokenId = parseInt(e.for.getAttribute('data-id'))
     e.for.innerHTML = 'Staking...'
     e.for.classList.add('disabled')
     //ask for allowance
-    blockapi.notify('info', 'Waiting for allowance...')
+    notify('info', 'Waiting for allowance...')
     if ((await blockapi.read(nft, 'getApproved', tokenId)) != staking._address) {
       try {
         await send(nft, 'approve(address,uint256)', 6, 0, staking._address, tokenId)
       } catch(error) {
-        blockapi.notify('error', error.message)
+        notify('error', error.message)
         e.for.innerHTML = 'Stake'
         e.for.classList.remove('disabled')
         return false
@@ -177,11 +186,11 @@
     }
 
     //stake
-    blockapi.notify('info', 'Staking sunflower...')
+    notify('info', 'Staking sunflower...')
     try {
       await send(staking, 'stake(uint256)', 2, 0, tokenId)
     } catch(error) {
-      blockapi.notify('error', error.message)
+      notify('error', error.message)
       e.for.innerHTML = 'Stake'
       e.for.classList.remove('disabled')
       return false
@@ -202,11 +211,11 @@
   window.addEventListener('release-click', async(e) => {
     if (releasing) return
     releasing = true
-    blockapi.notify('info', 'Releasing all $GRATIS...')
+    notify('info', 'Releasing all $GRATIS...')
     try {
       await send(staking, 'release', 2, 0)
     } catch(e) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
       return false
     }
     //update state
@@ -219,11 +228,11 @@
   window.addEventListener('unstake-click', async(e) => {
     if (unstaking) return
     unstaking = true
-    blockapi.notify('info', 'Unstaking all sunflowers...')
+    notify('info', 'Unstaking all sunflowers...')
     try {
       await send(staking, 'unstake', 2, 0)
     } catch(e) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
       return false
     }
 
@@ -241,9 +250,7 @@
   })
 
   window.addEventListener('connect-click', () => {
-    if (!state.account) {
-      return blockapi.connect(blockmetadata, connected, disconnected)
-    }
+    blockapi.connect(blockmetadata, connected, disconnected)
   })
 
   window.addEventListener('disconnect-click', () => {
@@ -252,4 +259,5 @@
   })
 
   window.doon('body')
+  blockapi.startSession(blockmetadata, connected, disconnected, true)
 })()

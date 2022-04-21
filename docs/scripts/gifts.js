@@ -1,22 +1,24 @@
 (async() => {
-  const connected = function(newstate) {
+  const connected = function(newstate, session) {
     Object.assign(state, newstate, { connected: true })
     document.getElementById('disconnected').style.display = 'none'
-    blockapi.notify('success', 'Wallet connected')
-
-    if (!isConnected) {
-      isConnected = true
-      populate()
+    if (!session) {
+      notify('success', 'Wallet connected')
     }
+
+    populate()
   }
 
-  const disconnected = function(e) {
+  const disconnected = async function(e, session) {
     if (e?.message) {
-      blockapi.notify('error', e.message)
+      notify('error', e.message)
     } else {
-      isConnected = false
       document.getElementById('disconnected').style.display = 'block'
-      blockapi.notify('success', 'Wallet disconnected')
+      if (!session) {
+        notify('success', 'Wallet disconnected')
+      } else if (await blockapi.inNetwork(blockmetadata)) {
+        populate()
+      }
     }
   }
 
@@ -31,7 +33,7 @@
       const rpc = blockapi.send(contract, state.account, method, value, ...args)
 
       rpc.on('transactionHash', function(hash) {
-        blockapi.notify(
+        notify(
           'success', 
           `Transaction started on <a href="${blockmetadata.chain_scan}/tx/${hash}" target="_blank">
             etherscan.com
@@ -43,19 +45,19 @@
       rpc.on('confirmation', function(confirmationNumber, receipt) {
         if (confirmationNumber > confirmations) return
         if (confirmationNumber == confirmations) {
-          blockapi.notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
+          notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
             etherscan.com
           </a>. Please stay on this page and wait for ${confirmations} confirmations...`)
           resolve()
           return
         }
-        blockapi.notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
+        notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
           etherscan.com
         </a>. Please stay on this page and wait for ${confirmations} confirmations...`, 1000000)
       })
 
       rpc.on('receipt', function(receipt) {
-        blockapi.notify(
+        notify(
           'success', 
           `Confirming on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
             etherscan.com
@@ -115,7 +117,6 @@
     window.doon('div.items')
   }
   
-  let isConnected = false
   let populated = false
   const store = blockapi.contract('store')
   const token = blockapi.contract('token')
@@ -123,9 +124,7 @@
   const items = document.querySelector('div.items')
 
   window.addEventListener('connect-click', () => {
-    if (!state.account) {
-      return blockapi.connect(blockmetadata, connected, disconnected)
-    }
+    blockapi.connect(blockmetadata, connected, disconnected)
   })
 
   window.addEventListener('buy-eth-click', async function buyETH(e) {
@@ -141,20 +140,20 @@
     const supply = parseInt(e.for.getAttribute('data-supply'))
 
     if (price == 0) {
-      return blockapi.notify('error', 'Item is unavailable right now')
+      return notify('error', 'Item is unavailable right now')
     } else if (max > 0 && max <= supply) {
-      return blockapi.notify('error', 'Item is sold out')
+      return notify('error', 'Item is sold out')
     }
 
     const original = e.for.innerHTML
     e.for.innerHTML = 'Minting...'
     e.for.classList.add('disabled')
 
-    blockapi.notify('info', 'Minting item...')
+    notify('info', 'Minting item...')
     try {
       await send(store, 'buy(address,uint256,uint256)', 6, price, state.account,id,1)
     } catch(error) {
-      blockapi.notify('error', error.message)
+      notify('error', error.message)
       e.for.innerHTML = original
       e.for.classList.remove('disabled')
       return false
@@ -162,7 +161,7 @@
 
     e.for.innerHTML = original
     e.for.classList.remove('disabled')
-    blockapi.notify(
+    notify(
       'success', 
       `Minting is now complete. You can view your item on <a href="${blockmetadata.chain_marketplace}/${store._address}/${id}" target="_blank">
         opensea.io
@@ -185,26 +184,26 @@
     const supply = parseInt(e.for.getAttribute('data-supply'))
 
     if (price == 0) {
-      return blockapi.notify('error', 'Item is unavailable right now')
+      return notify('error', 'Item is unavailable right now')
     } else if (max > 0 && max <= supply) {
-      return blockapi.notify('error', 'Item is sold out')
+      return notify('error', 'Item is sold out')
     }
 
     //check gratis balance
     const balance = await blockapi.read(token, 'balanceOf', state.account)
     if ((balance - price) < 0) {
-      return blockapi.notify('error', 'Not enough GRATIS in your wallet')
+      return notify('error', 'Not enough GRATIS in your wallet')
     }
 
     const original = e.for.innerHTML
     e.for.innerHTML = 'Minting...'
     e.for.classList.add('disabled')
 
-    blockapi.notify('info', 'Minting item...')
+    notify('info', 'Minting item...')
     try {
       await send(store, 'support(address,uint256,uint256)', 6, 0, state.account,id,1)
     } catch(error) {
-      blockapi.notify('error', error.message)
+      notify('error', error.message)
       e.for.innerHTML = original
       e.for.classList.remove('disabled')
       return false
@@ -212,7 +211,7 @@
 
     e.for.innerHTML = original
     e.for.classList.remove('disabled')
-    blockapi.notify(
+    notify(
       'success', 
       `Minting is now complete. You can view your item on <a href="${blockmetadata.chain_marketplace}/${store._address}/${id}" target="_blank">
         opensea.io
@@ -221,16 +220,6 @@
     )
   })
 
-  if (window.ethereum?.request) {
-    try {//matching network
-      const networkId = await window.ethereum.request({ method: 'net_version' });
-      if (networkId == blockmetadata.chain_id) {
-        populate()
-      } else {
-        items.innerHTML = ''
-      }
-    } catch (e) {}
-  }
-
   window.doon('body')
+  blockapi.startSession(blockmetadata, connected, disconnected, true)
 })()
