@@ -18,7 +18,10 @@
 }
 
 .section-1 .note {
-  color: #DF0000;
+  display: block;
+  margin-top: 10px;
+  font-size: 12px;
+  text-transform: uppercase;
 }
 
 .section-2 {
