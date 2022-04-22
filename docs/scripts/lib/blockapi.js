@@ -164,8 +164,17 @@ window.blockapi = {
     return this
   },
 
-  async connect(blockmetadata, connected, disconnected) {
+  async connect(blockmetadata, connected, disconnected, attempts = 0) {
     if (!window.ethereum?.isMetaMask) {
+      if (!attempts) {
+        const tryAgain = this.connect.bind(this, blockmetadata, connected, disconnected, attempts + 1)
+        window.addEventListener('ethereum#initialized', tryAgain, { once: true })
+        // If the event is not dispatched by the end of the timeout,
+        // the user probably doesn't have MetaMask installed.
+        setTimeout(tryAgain, 3000); // 3 seconds
+        return
+      }
+      
       return disconnected({ 
         connected: false, 
         message: 'Please install <a href="https://metamask.io/" target="_blank">MetaMask</a> and refresh this page.' 
