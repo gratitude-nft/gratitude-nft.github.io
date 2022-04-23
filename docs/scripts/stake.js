@@ -166,7 +166,6 @@
   }
 
   window.addEventListener('stake-click', async(e) => {
-    //return notify('error', 'Staking is available after the reveal.')
     //if disabled already
     if (e.for.classList.contains('disabled')) return
     const tokenId = parseInt(e.for.getAttribute('data-id'))
