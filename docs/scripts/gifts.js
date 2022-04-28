@@ -91,7 +91,12 @@
           .replace('{ID}', i + 1)
           .replace('{ID}', i + 1)
           .replace('{NAME}', json.name)
-          .replace('{DESCRIPTION}', json.description)
+          .replace('{DESCRIPTION}', json.description
+            .replace(/(https?:\/\/[^\s]+)/g, url => {
+              return `<a href="${url}" target="_blank">${url}</a>`;
+            })
+            .replace(/\n/g, '<br />')
+          )
           .replace('{ETH_HIDE}', info.eth > 0 ? '' : ' hide')
           .replace('{ETH_PRICE}', info.eth > 0 ? info.eth : 0)
           .replace('{ETH_PRICE}', info.eth > 0 ? blockapi.toEther(info.eth) : 0)
