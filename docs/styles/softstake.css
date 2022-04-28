@@ -113,10 +113,6 @@
   max-width: calc(33% - 10px);
 }
 
-.section-2 .assets .asset .hide {
-  display: none !important;
-}
-
 .section-2 .assets .asset .btn {
   border-radius: 5px;
   margin-top: 10px;
@@ -154,10 +150,16 @@
   width: 100%;
 }
 
-.section-2 .dc {
-  display: block;
-  margin: 20px auto 0;
-  max-width: 200px;
+.section-2 .actions {
+  display: flex;
+  justify-content: center;
+}
+
+.section-2 .actions .btn {
+  border-radius: 0;
+  display: inline-block;
+  margin: 20px 10px 0;
+  width: 200px;
   padding: 10px 20px;
   text-align: center;
 }
@@ -248,6 +250,16 @@
 }
 
 @media(max-width: 530px) {
+  .section-2 .actions {
+    display: block;
+  }
+
+  .section-2 .actions .btn {
+    display: block;
+    margin: 10px 30px 0;
+    width: auto;
+  }
+
   .section-3 .proof {
     display: block;
     margin: auto;

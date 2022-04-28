@@ -27,7 +27,7 @@
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
     <link rel="stylesheet" type="text/css" href="/styles/theme.css?v7" />
-    <link rel="stylesheet" type="text/css" href="/styles/stake.css?v7" />
+    <link rel="stylesheet" type="text/css" href="/styles/softstake.css?v7" />
   </head>
   <body>
     <header class="head">
@@ -46,19 +46,19 @@
     </header>
     <main class="body">
       <section class="section section-1">
-        <h1>Stake your Sunflowers and get Tokens of Gratitude</h1>
+        <h1>Soft Stake your Sunflowers and get Tokens of Gratitude</h1>
         <p>$GRATIS are tokens earned from staking sunflowers.</p>
         <div id="disconnected">
           <a class="btn btn-primary" data-do="connect" data-on="click" href="javascript:void(0)">
             Connect Your Ethereum Wallet
           </a>
-          <a class="note" href="https://metamask.app.link/dapp/www.gratitudegang.io/stake" target="_blank">
+          <a class="note" href="https://metamask.app.link/dapp/www.gratitudegang.io/softstake" target="_blank">
             Use Metamask Mobile
           </a>
         </div>
         <h4>Choose From:</h4>
         <nav class="mode">
-          <strong>Hard Staking</strong> | <a href="./softstake.html">Soft Staking</a>
+          <a href="./stake.html">Hard Staking</a> | <strong>Soft Staking</strong>
         </nav>
       </section>
       <section class="section section-2">
@@ -71,7 +71,6 @@
               </div>
               <span>??</span>
             </div>
-            <a class="cta cta-unstake" data-do="unstake" data-on="click" href="javascript:void(0)">Unstake All</a>
           </div>
           <div class="yield">
             <h4>$GRATIS/sec</h4>
@@ -103,9 +102,17 @@
               Loading. This could take a few minutes&hellip;
             </div>
           </div>
-          <a class="btn btn-outline-primary dc" data-do="disconnect" data-on="click" href="javascript:void(0)">
-            Disconnect
-          </a>
+          <div class="actions">
+            <a class="btn btn-solid btn-primary stake hide" data-do="stake" data-on="click" href="javascript:void(0)">
+              Stake
+            </a>
+            <a class="btn btn-solid btn-danger unstake hide" data-do="unstake" data-on="click" href="javascript:void(0)">
+              Unstake
+            </a>
+            <a class="btn btn-outline btn-danger dc" data-do="disconnect" data-on="click" href="javascript:void(0)">
+              Disconnect
+            </a>
+          </div>
         </div>
       </section>
       <section class="section section-3">
@@ -164,6 +171,13 @@
             items will be listed for sale. This store accepts Ethers and 
             $GRATIS.
           </p>
+          <h3>How is Soft Staking Different From Hard Staking?</h3>
+          <p>
+            With hard staking you will need to temporarily need to 
+            transfer your NFT to a smart contract. And soft staking you 
+            don't. Hard staking will still be available and you earn 
+            more with hard staking vs soft staking.
+          </p>
           <h3>How do I stake my sunflowers?</h3>
           <ol>
             <li>
@@ -219,9 +233,9 @@
               </a>
             </li>
             <li>
-              FlowerPower (staking): 
-              <a href="https://etherscan.io/address/0xa20095F3893039B5143710ba7CE476860B2572e6" target="_blank">
-                https://etherscan.io/address/0xa20095F3893039B5143710ba7CE476860B2572e6
+              FlowerShower (staking): 
+              <a href="https://etherscan.io/address/0xAC06425358ddECC1dF7bea26C5732cFE41dD4a21" target="_blank">
+                https://etherscan.io/address/0xAC06425358ddECC1dF7bea26C5732cFE41dD4a21
               </a>
             </li>
           </ul>
@@ -265,15 +279,14 @@
         <div class="image"><img src="{IMAGE}" loading="lazy" /></div>
         <div class="info">
           <h4>{NAME}</h4>
-          <span class="yeild">{YIELD}</span>
-          <div class="actions">
+          <div class="toggle">
             <button 
-              class="btn btn-primary{STAKE_HIDE}"
-              data-do="stake"
+              class="btn btn-solid {CLASS}"
+              data-do="queue"
+              data-state="{STATE}"
               data-on="click"
               data-id="{TOKEN_ID}"
-            >Stake</button>
-            <button class="btn btn-outline-primary{UNSTAKE_HIDE}">Staked</button>
+            >{ACTION}</button>
           </div>
         </div>
       </div>
@@ -283,6 +296,6 @@
     <script type="text/javascript" src="/scripts/lib/blockapi.js?v7"></script>
     <script type="text/javascript" src="/scripts/lib/notify.js"></script>
     <script type="text/javascript" src="/scripts/contracts-mainnet.js?v7"></script>
-    <script type="text/javascript" src="/scripts/stake.js?v7"></script>
+    <script type="text/javascript" src="/scripts/softstake.js?v7"></script>
   </body>
 </html>

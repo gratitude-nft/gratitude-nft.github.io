@@ -15,6 +15,10 @@ a, a:hover, a:active, a:visited {
   text-decoration: underline;
 }
 
+.hide {
+  display: none !important;
+}
+
 .container {
   margin: auto;
   max-width: 900px;
@@ -46,6 +50,7 @@ a, a:hover, a:active, a:visited {
 .btn-solid:hover,
 .btn-solid:active,
 .btn-solid:visited {
+  border: 0;
   color: #FFFFFF;
 }
 
@@ -96,10 +101,15 @@ a, a:hover, a:active, a:visited {
   padding: 5px 10px;
 }
 
+.btn-outline.btn-primary, 
+.btn-outline.btn-primary:hover, 
+.btn-outline.btn-primary:active, 
+.btn-outline.btn-primary:visited,
 .btn-outline-primary, 
 .btn-outline-primary:hover, 
 .btn-outline-primary:active, 
 .btn-outline-primary:visited {
+  background-color: #FFFFFF;
   border: 1px solid #9456FF;
   display: inline-block;
   color: #9456FF;

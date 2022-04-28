@@ -1,19 +1,10 @@
 (async() => {
-  const connected = async function(newstate, session) {
-    Object.assign(state, newstate, { 
-      connected: true,
-      rate: new BN(await blockapi.read(staking, 'TOKEN_RATE'))
-    })
-    //if first time connecting
-    if (!session) {
-      notify('success', 'Wallet connected')
-    }
-    document.getElementById('connected').style.display = 'block'
-    document.getElementById('disconnected').style.display = 'none'
-    
+  const setState = async function() {
     //get NFTs owned and staked
-    state.owned = await blockapi.read(staking, 'ownerTokens', state.account)
-    state.owned = state.owned.map(id => parseInt(id)).filter(id => id > 0)
+    const tokens = await blockapi.read(staking, 'ownerTokens', state.account)
+    state.owned = tokens.unstaked.map(id => parseInt(id)).filter(id => id > 0)
+    state.staked = tokens.staked.map(id => parseInt(id)).filter(id => id > 0)
+
     for (let i = 0; i < state.owned.length; i++) {
       const uri = await blockapi.read(nft, 'tokenURI', state.owned[i])
       const response = await fetch(uri)
@@ -23,8 +14,7 @@
         metadata: json
       }
     }
-    state.staked = await blockapi.read(staking, 'tokensStaked', state.account)
-    state.staked = state.staked.map(id => parseInt(id)).filter(id => id > 0)
+
     for (let i = 0; i < state.staked.length; i++) {
       const uri = await blockapi.read(nft, 'tokenURI', state.staked[i])
       const response = await fetch(uri)
@@ -36,12 +26,13 @@
       }
     }
     //get releasable
-    state.releasable = await blockapi.read(staking, 'totalReleaseable', state.account)
-    //update the UI
-    updateUI()
+    state.releasable = await blockapi.read(
+      staking, 
+      'totalReleaseable', 
+      state.staked.map(staked => staked.tokenId)
+    )
   }
 
-  let interval = null;
   const updateUI = function() {
     const incrementer = state.rate.mul(new BN(state.staked.length))
     //next update elements
@@ -65,9 +56,9 @@
         .replace('{TOKEN_ID}', state.staked[i].tokenId)
         .replace('{IMAGE}', state.staked[i].metadata.preview || state.staked[i].metadata.image)
         .replace('{NAME}', state.staked[i].metadata.name)
-        .replace('{YIELD}', '')//blockapi.toEther(state.staked[i].releasable)
-        .replace('{STAKE_HIDE}', ' hide')
-        .replace('{UNSTAKE_HIDE}', '')
+        .replace('{STATE}', 'staked')
+        .replace('{ACTION}', 'Unstake')
+        .replace('{CLASS}', 'btn-danger')
       )
     }
 
@@ -77,23 +68,35 @@
         .replace('{TOKEN_ID}', state.owned[i].tokenId)
         .replace('{IMAGE}', state.owned[i].metadata.preview || state.owned[i].metadata.image)
         .replace('{NAME}', state.owned[i].metadata.name)
-        .replace('{YIELD}', '')
-        .replace('{STAKE_HIDE}', '')
-        .replace('{UNSTAKE_HIDE}', ' hide')
+        .replace('{STATE}', 'unstaked')
+        .replace('{ACTION}', 'Stake')
+        .replace('{CLASS}', 'btn-primary')
       )
     }
 
-    if (state.staked.length) {
-      document.querySelector('a.cta-release').style.display = 'block'
-      document.querySelector('a.cta-unstake').style.display = 'block'
-    } else {
-      document.querySelector('a.cta-release').style.display = 'none'
-      document.querySelector('a.cta-unstake').style.display = 'none'
-    }
+    document.querySelector('a.cta-release').style.display = state.staked.length
+      ? 'block' : 'none'
 
     document.querySelector('div.assets').innerHTML = rows.join('')
 
     window.doon('div.assets')
+  }
+
+  const connected = async function(newstate, session) {
+    Object.assign(state, newstate, { 
+      connected: true,
+      rate: new BN(await blockapi.read(staking, 'TOKEN_RATE'))
+    })
+    //if first time connecting
+    if (!session) {
+      notify('success', 'Wallet connected')
+    }
+    document.getElementById('connected').style.display = 'block'
+    document.getElementById('disconnected').style.display = 'none'
+    
+    await setState()
+    //update the UI
+    updateUI()
   }
 
   const disconnected = function(e, session) {
@@ -104,6 +107,7 @@
       if (!session) {
         notify('success', 'Wallet disconnected')
       }
+      state.queue = {}
       document.getElementById('connected').style.display = 'none'
       document.getElementById('disconnected').style.display = 'block'
     }
@@ -155,52 +159,80 @@
     })
   }
 
+  let interval = null;
   const BN = blockapi.web3().utils.BN
   const nft = blockapi.contract('nft')
-  const staking = blockapi.contract('staking')
-  const softing = blockapi.contract('softing')
+  const staking = blockapi.contract('softing')
   const token = blockapi.contract('token')
   const state = { 
     connected: false,
+    queue: {},
     staked: [],
     owned: []
   }
 
+  window.addEventListener('queue-click', async(e) => {
+    //get tokenId
+    const tokenId = parseInt(e.for.getAttribute('data-id'))
+    
+    //if already queued up
+    if (state.queue[tokenId]) {
+      //remove from queue
+      delete state.queue[tokenId]
+      e.for.classList.add('btn-solid')
+      e.for.classList.remove('btn-outline')
+      //update item button ui
+      if (e.for.getAttribute('data-state') === 'staked') {
+        e.for.innerHTML = 'Unstake'
+        for (const id in state.queue) {
+          if (state.queue[id] === 'to_unstake') return
+        }
+        document.querySelector('#connected .actions .unstake').classList.add('hide')
+        return
+      } else {
+        e.for.innerHTML = 'Stake'
+        for (const id in state.queue) {
+          if (state.queue[id] === 'to_stake') return
+        }
+        document.querySelector('#connected .actions .stake').classList.add('hide')
+      }
+
+      return
+    }
+    //it's not queued
+    e.for.innerHTML = 'Queued'
+    e.for.classList.remove('btn-solid')
+    e.for.classList.add('btn-outline')
+    if (e.for.getAttribute('data-state') === 'staked') {
+      state.queue[tokenId] = 'to_unstake'
+      document.querySelector('#connected .actions .unstake').classList.remove('hide')
+    } else {
+      state.queue[tokenId] = 'to_stake'
+      document.querySelector('#connected .actions .stake').classList.remove('hide')
+    }
+  })
+
   window.addEventListener('stake-click', async(e) => {
     //if disabled already
     if (e.for.classList.contains('disabled')) return
-    const tokenId = parseInt(e.for.getAttribute('data-id'))
     e.for.innerHTML = 'Staking...'
     e.for.classList.add('disabled')
-
-    //get NFTs owned and staked
-    const softtokens = await blockapi.read(softing, 'ownerTokens', state.account)
-    for (const id of softtokens.staked) {
-      if (parseInt(id) == tokenId) {
-        notify('error', 'NFT is already soft staking')
-        e.for.innerHTML = 'Stake'
-        e.for.classList.remove('disabled')
-        return false
-      }
+    const forStaking = []
+    for (const id in state.queue) {
+      if (state.queue[id] === 'to_stake') forStaking.push(id)
     }
 
-    //ask for allowance
-    notify('info', 'Waiting for allowance...')
-    if ((await blockapi.read(nft, 'getApproved', tokenId)) != staking._address) {
-      try {
-        await send(nft, 'approve(address,uint256)', 6, 0, staking._address, tokenId)
-      } catch(error) {
-        notify('error', error.message)
-        e.for.innerHTML = 'Stake'
-        e.for.classList.remove('disabled')
-        return false
-      }
+    if (!forStaking.length) {
+      notify('error', 'No NFTs Selected')
+      e.for.innerHTML = 'Stake'
+      e.for.classList.remove('disabled')
+      return false
     }
 
     //stake
-    notify('info', 'Staking sunflower...')
+    notify('info', 'Staking sunflowers...')
     try {
-      await send(staking, 'stake(uint256)', 2, 0, tokenId)
+      await send(staking, 'stake', 2, 0, forStaking)
     } catch(error) {
       notify('error', error.message)
       e.for.innerHTML = 'Stake'
@@ -208,14 +240,13 @@
       return false
     }
 
+    e.for.innerHTML = 'Stake'
+    e.for.classList.remove('disabled')
+    document.querySelector('#connected .actions .stake').classList.add('hide')
+    document.querySelector('#connected .actions .unstake').classList.add('hide')
+
     //update state
-    state.owned = state.owned.filter(token => {
-      if (token.tokenId == tokenId) {
-        state.staked.push(token)
-        return false
-      }
-      return true
-    })
+    await setState()
     updateUI()
   })
 
@@ -225,7 +256,7 @@
     releasing = true
     notify('info', 'Releasing all $GRATIS...')
     try {
-      await send(staking, 'release', 2, 0)
+      await send(staking, 'release', 2, 0, state.staked.map(token => token.tokenId))
     } catch(e) {
       notify('error', e.message)
       return false
@@ -236,23 +267,39 @@
     updateUI()
   })
 
-  let unstaking = false
   window.addEventListener('unstake-click', async(e) => {
-    if (unstaking) return
-    unstaking = true
-    notify('info', 'Unstaking all sunflowers...')
-    try {
-      await send(staking, 'unstake', 2, 0)
-    } catch(e) {
-      notify('error', e.message)
+    //if disabled already
+    if (e.for.classList.contains('disabled')) return
+    e.for.innerHTML = 'Unstaking...'
+    e.for.classList.add('disabled')
+    const forUnstaking = []
+    for (const id in state.queue) {
+      if (state.queue[id] === 'to_unstake') forUnstaking.push(id)
+    }
+
+    if (!forUnstaking.length) {
+      notify('error', 'No NFTs Selected')
+      e.for.innerHTML = 'Unstake'
+      e.for.classList.remove('disabled')
       return false
     }
 
+    try {
+      await send(staking, 'unstake', 2, 0, forUnstaking)
+    } catch(error) {
+      notify('error', error.message)
+      e.for.innerHTML = 'Unstake'
+      e.for.classList.remove('disabled')
+      return false
+    }
+
+    e.for.innerHTML = 'Unstake'
+    e.for.classList.remove('disabled')
+    document.querySelector('#connected .actions .stake').classList.add('hide')
+    document.querySelector('#connected .actions .unstake').classList.add('hide')
+
     //update state
-    unstaking = false
-    state.owned = state.owned.concat(state.staked)
-    state.staked = []
-    state.releasable = 0
+    await setState()
     updateUI()
   })
 
