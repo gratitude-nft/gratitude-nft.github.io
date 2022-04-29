@@ -31,6 +31,7 @@
     })
   }
 
+  const token = blockapi.contract('token')
   window.addEventListener('watch-click', async(e) => {
     const image = 'https://www.gratitudegang.io/images/mint/minting-icon.png'
     blockapi.watch(blockmetadata, token._address, 'ERC20', 'GRATIS', 18, image)
