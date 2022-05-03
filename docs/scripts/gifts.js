@@ -6,6 +6,15 @@
       notify('success', 'Wallet connected')
     }
 
+    if (window.location.hash) {
+      const trigger = document.createElement('div')
+      trigger.setAttribute('data-do', 'modal-open')
+      trigger.setAttribute('data-id', window.location.hash.substring(1))
+      trigger.setAttribute('data-on', 'click')
+      window.doon(trigger)
+      trigger.click()
+    }
+
     populate()
   }
 
@@ -89,37 +98,24 @@
         const item = toElement(template
           .replace('{IMAGE}', `/images/store/GoG-${i + 1}-preview.jpg`)//json.preview || json.image
           .replace('{ID}', i + 1)
-          .replace('{ID}', i + 1)
           .replace('{NAME}', json.name)
-          .replace('{DESCRIPTION}', json.description
-            .replace(/(https?:\/\/[^\s]+)/g, url => {
-              return `<a href="${url}" target="_blank">${url}</a>`;
-            })
-            .replace(/\n/g, '<br />')
-          )
           .replace('{ETH_HIDE}', info.eth > 0 ? '' : ' hide')
-          .replace('{ETH_PRICE}', info.eth > 0 ? info.eth : 0)
           .replace('{ETH_PRICE}', info.eth > 0 ? blockapi.toEther(info.eth) : 0)
           .replace('{GRATIS_HIDE}', info.gratis > 0 ? '' : ' hide')
-          .replace('{GRATIS_PRICE}', info.gratis > 0 ? info.gratis: 0)
           .replace('{GRATIS_PRICE}', info.gratis > 0 ? blockapi.toEther(info.gratis): 0)
           .replace('{SUPPLY}', info.max > 0 
             ? (info.supply > 0 || info.max < 26 ? `${info.max - info.supply}/${info.max} remaining`: '')
             : (info.supply > 0 ? `${info.supply} sold`: '')
           )
-          .replace('{MAX}', info.max)
-          .replace('{MAX}', info.max)
-          .replace('{SUPPLY}', info.supply)
-          .replace('{SUPPLY}', info.supply)
         )
         populated = true
 
         items.appendChild(item)
+        window.doon(item)
       } catch(e) {
         break
       }
     }
-    window.doon('div.items')
   }
   
   let populated = false
@@ -127,6 +123,7 @@
   const token = blockapi.contract('token')
   const state = { connected: false }
   const items = document.querySelector('div.items')
+  const modalTpl = document.getElementById('modal-item').innerHTML
 
   window.addEventListener('connect-click', () => {
     blockapi.connect(blockmetadata, connected, disconnected)
@@ -223,6 +220,56 @@
       </a>.`,
       1000000
     )
+  })
+
+  window.addEventListener('modal-open-click', async (e) => {
+    const id = parseInt(e.for.getAttribute('data-id'))
+    //get metadata
+    const response = await fetch(`/data/gifts/${id}.json`)
+    const json = await response.json()
+    //get info
+    const info = await blockapi.read(store, 'tokenInfo', id)
+
+    const modal = toElement(modalTpl
+      .replace('{IMAGE}', `/images/store/GoG-${id}-preview.jpg`)//json.preview || json.image
+      .replace('{ID}', id)
+      .replace('{ID}', id)
+      .replace('{NAME}', json.name)
+      .replace('{DESCRIPTION}', json.description
+        .replace(/(https?:\/\/[^\s]+)/g, url => {
+          return `<a href="${url}" target="_blank">${url}</a>`;
+        })
+        .replace(/\n/g, '<br />')
+      )
+      .replace('{ETH_HIDE}', info.eth > 0 ? '' : ' hide')
+      .replace('{ETH_PRICE}', info.eth > 0 ? info.eth : 0)
+      .replace('{ETH_PRICE}', info.eth > 0 ? blockapi.toEther(info.eth) : 0)
+      .replace('{GRATIS_HIDE}', info.gratis > 0 ? '' : ' hide')
+      .replace('{GRATIS_PRICE}', info.gratis > 0 ? info.gratis : 0)
+      .replace('{GRATIS_PRICE}', info.gratis > 0 ? blockapi.toEther(info.gratis): 0)
+      .replace('{SUPPLY}', info.max > 0 
+        ? (info.supply > 0 || info.max < 26 ? `${info.max - info.supply}/${info.max} remaining`: '')
+        : (info.supply > 0 ? `${info.supply} sold`: '')
+      )
+      .replace('{MAX}', info.max)
+      .replace('{MAX}', info.max)
+      .replace('{SUPPLY}', info.supply)
+      .replace('{SUPPLY}', info.supply)
+    )
+
+    document.body.appendChild(modal)
+    window.doon(modal)
+  })
+
+  window.addEventListener('modal-overlay-close-click', (e) => {
+    if (e.originalEvent.target.classList.contains('modal')) {
+      document.body.removeChild(e.for)
+    }
+  })
+
+  window.addEventListener('modal-close-click', (e) => {
+    const modal = document.querySelector(e.for.getAttribute('data-target'))
+    modal.parentNode.removeChild(modal)
   })
 
   window.doon('body')

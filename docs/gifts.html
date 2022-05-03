@@ -26,8 +26,8 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" />
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v7" />
-    <link rel="stylesheet" type="text/css" href="/styles/gifts.css?v7" />
+    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v8" />
+    <link rel="stylesheet" type="text/css" href="/styles/gifts.css?v8" />
   </head>
   <body>
     <header class="head">
@@ -58,12 +58,7 @@
         </div>
       </section>
       <section class="section section-2">   
-        <div class="items">
-          <div class="alert">
-            <i class="fas fa-info-circle"></i>
-            Loading. This could take a few minutes&hellip;
-          </div>
-        </div>
+        <div class="items"></div>
       </section>
     </main>
     <footer class="foot">
@@ -95,44 +90,73 @@
       </div>
     </footer>
     <template id="tpl-item">
-      <div class="item">
+      <div class="item" data-do="modal-open" data-id="{ID}" data-on="click">
         <div class="preview">
           <img src="{IMAGE}" loading="lazy" />
         </div>
         <div class="info">
           <h3>{NAME}</h3>
-          <p>{DESCRIPTION}</p>
           <div class="supply">{SUPPLY}</div>
-          <div class="actions">
-            <a 
-              class="btn btn-outline btn-primary{ETH_HIDE}"
-              data-id="{ID}"
-              data-price="{ETH_PRICE}"
-              data-max="{MAX}"
-              data-supply="{SUPPLY}"
-              data-do="buy-eth" 
-              data-on="click"
-              href="javascript:void(0)"
-            >Mint Now For Ξ {ETH_PRICE} ETH</a>
-            <a 
-              class="btn btn-outline btn-primary{GRATIS_HIDE}"
-              data-id="{ID}"
-              data-price="{GRATIS_PRICE}"
-              data-max="{MAX}"
-              data-supply="{SUPPLY}"
-              data-do="buy-gratis" 
-              data-on="click"
-              href="javascript:void(0)"
-            >Mint Now For 🌻 {GRATIS_PRICE} GRATIS</a>
+          <div class="price">
+            <span class="eth{ETH_HIDE}">
+              <img src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg" width="8" /> 
+              {ETH_PRICE}
+            </span>
+            <span class="gratis{GRATIS_HIDE}">🌻 {GRATIS_PRICE}</span>
           </div>
+        </div>
+      </div>
+    </template>
+    <template id="modal-item">
+      <div id="modal" class="modal" data-do="modal-overlay-close" data-on="click">
+        <div class="overlay">
+          <header class="modal-head">
+            <a data-do="modal-close" data-on="click" data-target="#modal" href="javascript:void(0)">&times;</a>
+          </header>
+          <section class="modal-body">
+            <div class="center">
+              <div class="preview">
+                <img src="{IMAGE}" loading="lazy" />
+              </div>
+              <div class="info">
+                <h3>{NAME}</h3>
+                <p>{DESCRIPTION}</p>
+              </div>
+            </div>
+          </section>
+          <footer class="modal-foot">
+            <div class="supply">{SUPPLY}</div>
+            <div class="actions">
+              <a 
+                class="btn btn-outline btn-primary{ETH_HIDE}"
+                data-id="{ID}"
+                data-price="{ETH_PRICE}"
+                data-max="{MAX}"
+                data-supply="{SUPPLY}"
+                data-do="buy-eth" 
+                data-on="click"
+                href="javascript:void(0)"
+              >Mint Now For Ξ {ETH_PRICE} ETH</a>
+              <a 
+                class="btn btn-outline btn-primary{GRATIS_HIDE}"
+                data-id="{ID}"
+                data-price="{GRATIS_PRICE}"
+                data-max="{MAX}"
+                data-supply="{SUPPLY}"
+                data-do="buy-gratis" 
+                data-on="click"
+                href="javascript:void(0)"
+              >Mint Now For 🌻 {GRATIS_PRICE} GRATIS</a>
+            </div>
+          </footer>
         </div>
       </div>
     </template>
     <script src="//cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script type="text/javascript" src="/scripts/lib/doon.js"></script>
-    <script type="text/javascript" src="/scripts/lib/blockapi.js?v7"></script>
+    <script type="text/javascript" src="/scripts/lib/blockapi.js?v8"></script>
     <script type="text/javascript" src="/scripts/lib/notify.js"></script>
-    <script type="text/javascript" src="/scripts/contracts-mainnet.js?v7"></script>
-    <script type="text/javascript" src="/scripts/gifts.js?v7"></script>
+    <script type="text/javascript" src="/scripts/contracts-mainnet.js?v8"></script>
+    <script type="text/javascript" src="/scripts/gifts.js?v8"></script>
   </body>
 </html>

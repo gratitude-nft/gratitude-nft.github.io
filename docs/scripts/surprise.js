@@ -76,11 +76,11 @@
 
   window.addEventListener('surprise-click', async(e) => {
     if (!redeemers[state.account.toLowerCase()]) {
-      return notify('error', 'Sorry, you are not qualified for this surprise.')
+      return notify('error', `Sorry, ${state.account} is not qualified for this surprise.`)
     }
 
     if (state.consumed) {
-      return notify('error', 'You Were Already Surprised!')
+      return notify('error', `${state.account} Was Already Surprised!`)
     }
 
     try {

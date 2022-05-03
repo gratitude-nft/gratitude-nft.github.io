@@ -1,10 +1,17 @@
-window.doon = function(selector) {
-  Array.from(
-    document.querySelectorAll(selector)
-  ).forEach(function(container) {
-    Array.from(
-      container.querySelectorAll('*[data-do]')
-    ).forEach(function(origin) {
+window.doon = function(elements) {
+  if (typeof elements === 'string') {
+    elements = Array.from(document.querySelectorAll(elements))
+  }
+
+  if (!Array.isArray(elements)) {
+    elements = [elements]
+  }
+  elements.forEach(function(container) {
+    const todos = Array.from(container.querySelectorAll('*[data-do]'))
+    if (container.getAttribute('data-do')) {
+      todos.push(container)
+    }
+    todos.forEach(function(origin) {
       let actions = origin.getAttribute('data-do');
       if(!actions || origin.getAttribute('data-doon')) {
         return;
