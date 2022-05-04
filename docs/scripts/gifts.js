@@ -1,6 +1,7 @@
 (async() => {
   const connected = function(newstate, session) {
     Object.assign(state, newstate, { connected: true })
+    document.getElementById('connected').style.display = 'block'
     document.getElementById('disconnected').style.display = 'none'
     if (!session) {
       notify('success', 'Wallet connected')
@@ -22,6 +23,7 @@
     if (e?.message) {
       notify('error', e.message)
     } else {
+      document.getElementById('connected').style.display = 'none'
       document.getElementById('disconnected').style.display = 'block'
       if (!session) {
         notify('success', 'Wallet disconnected')

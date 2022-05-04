@@ -7,20 +7,27 @@
 }
 
 .section-1 {
-  background-color: #F4E8DA;
+  color: #FFFFFF;
+  background-color: #01BFDA;
+  background-image: url(/images/home/home-banner.png);
+  background-position: right;
+  background-repeat: no-repeat;
   padding: 40px 20px;
   text-align: center;
 }
 
 .section-1 h1 {
   margin: 0;
+  text-shadow: 0 0 3px #01BFDA;
 }
 
 .section-1 p {
   padding-bottom: 0;
+  text-shadow: 0 0 3px #01BFDA;
 }
 
 .section-1 .note {
+  color: #FFFFFF;
   display: block;
   margin-top: 10px;
   font-size: 12px;
