@@ -232,8 +232,15 @@
     //get info
     const info = await blockapi.read(store, 'tokenInfo', id)
 
+    //if it's a song
+    if ('song' in json && json.animation_url) {}
+
     const modal = toElement(modalTpl
       .replace('{IMAGE}', `/images/store/GoG-${id}-preview.jpg`)//json.preview || json.image
+      .replace('{AUDIO}', 'song' in json && json.animation_url
+        ? `<audio controls><source src="/images/store/GoG-${id}-compressed.mp3" type="audio/mpeg" /></audio>`
+        : ''
+      )
       .replace('{ID}', id)
       .replace('{ID}', id)
       .replace('{NAME}', json.name)
