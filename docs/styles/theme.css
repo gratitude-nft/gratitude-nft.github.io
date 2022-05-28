@@ -6,6 +6,10 @@ html, body {
   scroll-behavior: smooth; 
 }
 
+.connected {
+  display: none;
+}
+
 iframe {
   display: none;
 }
@@ -44,6 +48,11 @@ a, a:hover, a:active, a:visited {
 
 .btn:hover {
   text-decoration: none;
+}
+
+.btn-large {
+  border-radius: 0 !important;
+  padding: 12px 24px !important;
 }
 
 .btn-solid,
@@ -140,7 +149,8 @@ a, a:hover, a:active, a:visited {
 
 .notification div::before {
   display: inline-block;
-  font-family: "Font Awesome 5 Free"; font-weight: 900;
+  font-family: "Font Awesome 5 Free"; 
+  font-weight: 900;
   padding-right: 10px;
 }
 

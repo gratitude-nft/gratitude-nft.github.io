@@ -2,6 +2,8 @@
   const aside = document.querySelectorAll('#nav-update a')
   const nav = document.querySelectorAll('a.nav')
   const content = document.querySelectorAll('div.content')
+  const blockmetadata = toBlockmeta('ethereum')
+  const token = blockapi.contract(blockmetadata, 'token')
 
   Array.from(aside).forEach(link => {
     link.addEventListener('click', e => {
@@ -31,7 +33,6 @@
     })
   }
 
-  const token = blockapi.contract('token')
   window.addEventListener('watch-click', async(e) => {
     const image = 'https://www.gratitudegang.io/images/mint/minting-icon.png'
     blockapi.watch(blockmetadata, token._address, 'ERC20', 'GRATIS', 18, image)

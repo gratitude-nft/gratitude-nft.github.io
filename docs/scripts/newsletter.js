@@ -1,9 +1,17 @@
 (() => {
+  //------------------------------------------------------------------//
+  // Variables
+
+  let loaded = 0
+  let submitted = false
+
   const form = document.getElementById('google-form')
   const frame = document.getElementById('google-frame')
   const button = form.querySelector('button')
   const email = form.querySelector('input.input-email')
-  let submitted = false
+  
+  //------------------------------------------------------------------//
+  // Functions
 
   const submitable = function() {
     if (!submitted && email.value.length && email.value.match(
@@ -15,6 +23,9 @@
     }
   }
 
+  //------------------------------------------------------------------//
+  // Events
+
   email.addEventListener('keyup', () => setTimeout(submitable, 0))
   
   form.addEventListener('submit', () => {
@@ -23,7 +34,6 @@
     button.innerText = 'Working...'
   })
   
-  let loaded = 0
   frame.addEventListener('load', () => {
     if (loaded++ > 0) {
       form.parentElement.removeChild(form)

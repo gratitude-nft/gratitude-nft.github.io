@@ -2,12 +2,20 @@
   padding: 15px 40px;
 }
 
+.vault {
+  background-color: #000000;
+  padding: 20px 0 60px;
+  text-align: center;
+}
+
+.vault img {
+  cursor: pointer;
+  width: 200px;
+}
+
 .section-1 {
   color: #FFFFFF;
-  background-color: #01BFDA;
-  background-image: url(/images/home/home-banner.png);
-  background-position: right;
-  background-repeat: no-repeat;
+  background-color: #000000;
   padding: 40px 20px;
   text-align: center;
 }
@@ -30,16 +38,13 @@
   text-transform: uppercase;
 }
 
-.section-2 {
-  padding: 20px 0;
-}
-
 .section-2 .items {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   max-width: 1050px;
   margin: auto;
+  padding: 20px 0;
   width: 100%;
 }
 
@@ -63,15 +68,6 @@
 .section-2 .item .info h3 {
   font-size: 13px;
   margin: 0;
-}
-
-.section-2 .item .info p {
-  padding: 0;
-}
-
-.section-2 .item .info .supply {
-  font-size: 13px;
-  margin: 10px 0;
 }
 
 .section-2 .item .info .price span {
@@ -157,11 +153,6 @@
   border-top: 1px solid #CCCCCC;
   padding: 10px 20px;
   text-align: center;
-}
-
-.modal .overlay .modal-foot .supply {
-  font-size: 15px;
-  padding-bottom: 10px;
 }
 
 .modal .overlay .modal-foot .btn {

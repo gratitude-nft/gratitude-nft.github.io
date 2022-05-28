@@ -1,12 +1,36 @@
 (async() => {
-  const setState = async function() {
+  //sets up the MM SDK
+  MetaMaskSDK.setup(blocknet)
+
+  //------------------------------------------------------------------//
+  // Variables
+
+  let interval = null
+  let releasing = false
+
+  const state = { 
+    connected: false,
+    queue: {},
+    staked: [],
+    owned: []
+  }
+
+  const network = MetaMaskSDK.network('ethereum')
+  const nft = network.contract('nft')
+  const token = network.contract('token')
+  const staking = network.contract('softing')
+
+  //------------------------------------------------------------------//
+  // Functions
+
+  const setState = async function(next) {
     //get NFTs owned and staked
-    const tokens = await blockapi.read(staking, 'ownerTokens', state.account)
+    const tokens = await staking.read().ownerTokens(state.account)
     state.owned = tokens.unstaked.map(id => parseInt(id)).filter(id => id > 0)
     state.staked = tokens.staked.map(id => parseInt(id)).filter(id => id > 0)
-
+    //set NFTs in wallet
     for (let i = 0; i < state.owned.length; i++) {
-      const uri = await blockapi.read(nft, 'tokenURI', state.owned[i])
+      const uri = await nft.read().tokenURI(state.owned[i])
       const response = await fetch(uri)
       const json = await response.json()
       state.owned[i] = {
@@ -14,42 +38,49 @@
         metadata: json
       }
     }
-
+    //set NFTs staking
     for (let i = 0; i < state.staked.length; i++) {
-      const uri = await blockapi.read(nft, 'tokenURI', state.staked[i])
+      const uri = await nft.read().tokenURI(state.staked[i])
       const response = await fetch(uri)
       const json = await response.json()
       state.staked[i] = {
         tokenId: state.staked[i],
-        releasable: await blockapi.read(staking, 'releaseable', state.staked[i]),
+        releasable: await staking.read().releaseable(state.staked[i]),
         metadata: json
       }
     }
-    //get releasable
-    state.releasable = await blockapi.read(
-      staking, 
-      'totalReleaseable', 
+    //set releasable
+    state.releasable = await staking.read().totalReleaseable(
       state.staked.map(staked => staked.tokenId)
     )
+
+    if (typeof next === 'function') {
+      next()
+    }
   }
 
-  const updateUI = function() {
-    const incrementer = state.rate.mul(new BN(state.staked.length))
+  const populate = function() {
+    const incrementer = state.rate.mul(
+      MetaMaskSDK.toBigNumber(state.staked.length)
+    )
     //next update elements
     document.querySelector('div.stats div.staked span').innerHTML = state.staked.length
-    document.querySelector('div.stats div.yield span').innerHTML = blockapi.toEther(incrementer)
-    document.querySelector('div.stats div.releasable span').innerHTML = blockapi.toEther(state.releasable)
-    let releaseable = new BN(state.releasable)
-    //clear interval
+    document.querySelector('div.stats div.yield span').innerHTML = MetaMaskSDK.toEther(incrementer)
+    document.querySelector('div.stats div.releasable span').innerHTML = MetaMaskSDK.toEther(state.releasable)
+    //get the starting releaseable
+    let releaseable = MetaMaskSDK.toBigNumber(state.releasable)
+    //clear interval, start interval
     if (interval) clearInterval(interval)
-    //start interval
     interval = setInterval(() => {
+      //periodically update the tokens earned
       releaseable = releaseable.add(incrementer)
-      document.querySelector('div.stats div.releasable span').innerHTML = blockapi.toEther(releaseable)
+      document.querySelector('div.stats div.releasable span').innerHTML = MetaMaskSDK.toEther(releaseable)
     }, 1000)
+
+
+    //next add rows
     const rows = []
     const template = document.getElementById('tpl-asset').innerHTML
-    //next add rows
     for (let i = 0; i < state.staked.length; i++) {
       rows.push(template
         .replace('{TOKEN_ID}', state.staked[i].tokenId)
@@ -83,93 +114,53 @@
   }
 
   const connected = async function(newstate, session) {
+    //update state
     Object.assign(state, newstate, { 
       connected: true,
-      rate: new BN(await blockapi.read(staking, 'TOKEN_RATE'))
+      rate: MetaMaskSDK.toBigNumber(
+        await (staking.read().TOKEN_RATE())
+      )
     })
+    setState(populate)
     //if first time connecting
     if (!session) {
       notify('success', 'Wallet connected')
     }
-    document.getElementById('connected').style.display = 'block'
-    document.getElementById('disconnected').style.display = 'none'
-    
-    await setState()
-    //update the UI
-    updateUI()
+    //update HTML state
+    document.querySelectorAll('.connected').forEach(
+      el => (el.style.display = 'block')
+    )
+    document.querySelectorAll('.disconnected').forEach(
+      el => (el.style.display = 'none')
+    )
   }
 
-  const disconnected = function(e, session) {
-    if (e?.message) {
-      notify('error', e.message)
-    } else {
-      //if first time connecting
-      if (!session) {
+  const disconnected = function(newstate, e, session) {
+    //update state
+    Object.assign(state, newstate)
+    delete state.account
+    state.queue = {}
+    //if not from session start
+    if (!session) {
+      //if there's an error
+      if (e?.message) {
+        notify('error', e.message)
+      //if manually disconnected
+      } else {
         notify('success', 'Wallet disconnected')
       }
-      state.queue = {}
-      document.getElementById('connected').style.display = 'none'
-      document.getElementById('disconnected').style.display = 'block'
     }
+    //update html state
+    document.querySelectorAll('.connected').forEach(
+      el => (el.style.display = 'none')
+    )
+    document.querySelectorAll('.disconnected').forEach(
+      el => (el.style.display = 'block')
+    )
   }
 
-  const send = function(contract, method, confirmations, value, ...args) {
-    return new Promise(async (resolve, reject) => {
-      const rpc = blockapi.send(contract, state.account, method, value, ...args)
-
-      rpc.on('transactionHash', function(hash) {
-        notify(
-          'success', 
-          `Transaction started on <a href="${blockmetadata.chain_scan}/tx/${hash}" target="_blank">
-            etherscan.com
-          </a>. Please stay on this page and wait for ${confirmations} confirmations...`,
-          1000000
-        )
-      })
-
-      rpc.on('confirmation', function(confirmationNumber, receipt) {
-        if (confirmationNumber > confirmations) return
-        if (confirmationNumber == confirmations) {
-          notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
-            etherscan.com
-          </a>. Please stay on this page and wait for ${confirmations} confirmations...`)
-          resolve()
-          return
-        }
-        notify('success', `${confirmationNumber}/${confirmations} confirmed on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
-          etherscan.com
-        </a>. Please stay on this page and wait for ${confirmations} confirmations...`, 1000000)
-      })
-
-      rpc.on('receipt', function(receipt) {
-        notify(
-          'success', 
-          `Confirming on <a href="${blockmetadata.chain_scan}/tx/${receipt.transactionHash}" target="_blank">
-            etherscan.com
-          </a>. Please stay on this page and wait for ${confirmations} confirmations...`,
-          1000000
-        )
-      })
-
-      try {
-        await rpc
-      } catch(e) {
-        reject(e)
-      }
-    })
-  }
-
-  let interval = null;
-  const BN = blockapi.web3().utils.BN
-  const nft = blockapi.contract('nft')
-  const staking = blockapi.contract('softing')
-  const token = blockapi.contract('token')
-  const state = { 
-    connected: false,
-    queue: {},
-    staked: [],
-    owned: []
-  }
+  //------------------------------------------------------------------//
+  // Events
 
   window.addEventListener('queue-click', async(e) => {
     //get tokenId
@@ -187,14 +178,14 @@
         for (const id in state.queue) {
           if (state.queue[id] === 'to_unstake') return
         }
-        document.querySelector('#connected .actions .unstake').classList.add('hide')
+        document.querySelector('.connected .actions .unstake').classList.add('hide')
         return
       } else {
         e.for.innerHTML = 'Stake'
         for (const id in state.queue) {
           if (state.queue[id] === 'to_stake') return
         }
-        document.querySelector('#connected .actions .stake').classList.add('hide')
+        document.querySelector('.connected .actions .stake').classList.add('hide')
       }
 
       return
@@ -205,118 +196,139 @@
     e.for.classList.add('btn-outline')
     if (e.for.getAttribute('data-state') === 'staked') {
       state.queue[tokenId] = 'to_unstake'
-      document.querySelector('#connected .actions .unstake').classList.remove('hide')
+      document.querySelector('.connected .actions .unstake').classList.remove('hide')
     } else {
       state.queue[tokenId] = 'to_stake'
-      document.querySelector('#connected .actions .stake').classList.remove('hide')
+      document.querySelector('.connected .actions .stake').classList.remove('hide')
     }
   })
 
   window.addEventListener('stake-click', async(e) => {
     //if disabled already
     if (e.for.classList.contains('disabled')) return
+    //disable button state
     e.for.innerHTML = 'Staking...'
     e.for.classList.add('disabled')
+    //determine with NFTs are for staking
     const forStaking = []
     for (const id in state.queue) {
       if (state.queue[id] === 'to_stake') forStaking.push(id)
     }
-
+    //if no NFTs selected
     if (!forStaking.length) {
-      notify('error', 'No NFTs Selected')
+      //enable button state
       e.for.innerHTML = 'Stake'
       e.for.classList.remove('disabled')
-      return false
+      //report
+      return notify('error', 'No NFTs Selected')
     }
 
     //stake
     notify('info', 'Staking sunflowers...')
-    try {
-      await send(staking, 'stake', 2, 0, forStaking)
+    try { //to stake
+      await (staking.write(state.account, false, 2).stake(forStaking))
     } catch(error) {
-      notify('error', error.message)
+      //enable button state
       e.for.innerHTML = 'Stake'
       e.for.classList.remove('disabled')
-      return false
+      //report
+      return notify('error', error.message)
     }
 
+    //enable button state
     e.for.innerHTML = 'Stake'
     e.for.classList.remove('disabled')
-    document.querySelector('#connected .actions .stake').classList.add('hide')
-    document.querySelector('#connected .actions .unstake').classList.add('hide')
-
+    //hide button actions (by default, then setState will change again)
+    document.querySelector('.connected .actions .stake').classList.add('hide')
+    document.querySelector('.connected .actions .unstake').classList.add('hide')
     //update state
     await setState()
-    updateUI()
+    //update UI
+    populate()
   })
 
-  let releasing = false
   window.addEventListener('release-click', async(e) => {
+    //if already releasing, do nothing
     if (releasing) return
     releasing = true
+    //report
     notify('info', 'Releasing all $GRATIS...')
-    try {
-      await send(staking, 'release', 2, 0, state.staked.map(token => token.tokenId))
+    try { //to release
+      await (staking.write(state.account, false, 2).release(
+        state.staked.map(token => token.tokenId)
+      ))
     } catch(e) {
-      notify('error', e.message)
-      return false
+      releasing = false
+      //report
+      return notify('error', e.message)
     }
     //update state
     releasing = false
     state.releasable = 0
-    updateUI()
+    //update UI
+    populate()
   })
 
   window.addEventListener('unstake-click', async(e) => {
-    //if disabled already
+    //if disabled already, do nothing
     if (e.for.classList.contains('disabled')) return
+    //disable button state
     e.for.innerHTML = 'Unstaking...'
     e.for.classList.add('disabled')
+    //determine which ones for unstaking
     const forUnstaking = []
     for (const id in state.queue) {
       if (state.queue[id] === 'to_unstake') forUnstaking.push(id)
     }
-
+    //if nothing is for unstaking
     if (!forUnstaking.length) {
-      notify('error', 'No NFTs Selected')
+      //enable button state
       e.for.innerHTML = 'Unstake'
       e.for.classList.remove('disabled')
-      return false
+      //report
+      return notify('error', 'No NFTs Selected')
     }
 
-    try {
-      await send(staking, 'unstake', 2, 0, forUnstaking)
+    try { //to unstake
+      await (staking.write(state.account, false, 2).unstake(forUnstaking))
     } catch(error) {
-      notify('error', error.message)
+      //enable button state
       e.for.innerHTML = 'Unstake'
       e.for.classList.remove('disabled')
-      return false
+      //report
+      return notify('error', error.message)
     }
-
+    //enable button state
     e.for.innerHTML = 'Unstake'
     e.for.classList.remove('disabled')
-    document.querySelector('#connected .actions .stake').classList.add('hide')
-    document.querySelector('#connected .actions .unstake').classList.add('hide')
+    //hide button actions (by default, then setState will change again)
+    document.querySelector('.connected .actions .stake').classList.add('hide')
+    document.querySelector('.connected .actions .unstake').classList.add('hide')
 
     //update state
     await setState()
-    updateUI()
+    //update UI
+    populate()
   })
 
   window.addEventListener('watch-click', async(e) => {
-    const image = 'https://www.gratitudegang.io/images/mint/minting-icon.png'
-    blockapi.watch(blockmetadata, token._address, 'ERC20', 'GRATIS', 18, image)
+    await token.addToWallet()
   })
 
   window.addEventListener('connect-click', () => {
-    blockapi.connect(blockmetadata, connected, disconnected)
+    if (!staking?.address) {
+      return notify('error', 'Soft Staking is offline right now. Check back later.')
+    }
+    network.connectCB(connected, disconnected)
   })
 
   window.addEventListener('disconnect-click', () => {
-    delete state.account
-    disconnected()
+    disconnected({ connected: false })
   })
 
+  //------------------------------------------------------------------//
+  // Initialize
+
   window.doon('body')
-  blockapi.startSession(blockmetadata, connected, disconnected, true)
+  network.startSession(connected, disconnected, true)
 })()

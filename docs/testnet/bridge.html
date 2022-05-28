@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <title>Gratitude Gang Bridge</title>
+    <meta name="description" content="Gratitude Gang $GRATIS Token Bridge" />
+    <meta property="og:title" content="Gratitude Gang token bridge from Ethereum to Polygon and back." />
+    <meta property="og:description" content="Gratitude Gang $GRATIS Token Bridge" />
+    <meta property="og:image" content="//www.gratitudegang.io/images/logo-banner.jpg" />
+    <meta property="og:url" content="//www.gratitudegang.io/" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@gratitudenft" />
+    <meta name="twitter:title" content="Gratitude Gang $GRATIS Token Bridge" />
+    <meta name="twitter:description" content="Gratitude Gang token bridge from Ethereum to Polygon and back." />
+    <meta name="twitter:image" content="https://www.gratitudegang.io/images/preview-twitter.png" />
+
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" />
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+
+    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v10" />
+    <link rel="stylesheet" type="text/css" href="/styles/bridge.css?v10" />
+  </head>
+  <body>
+    <header class="head">
+      <nav class="left"><a class="logo" data-do="harlemify" data-on="click" href="javascript:void(0)"><img src="/images/logo.png" /></a></nav>
+      <nav class="right">
+        <a href="/#about">About</a>
+        <a href="/howto.html">How To</a>
+        <a href="/stake.html">Staking</a>
+        <a href="/gifts.html">Gifts</a>
+        <a href="/vault.html">Vault</a>
+        <a class="btn btn-outline-primary" href="/mint.html">Mint Now</a>
+        <a class="btn btn-primary" href="https://discord.gg/XEM7NPd6xd" target="_blank">
+          <i class="fab fa-discord"></i>
+          Discord
+        </a>
+      </nav>
+    </header>
+    <main id="particles-js" class="body">
+      <section class="section section-1">
+        <div class="container">
+          <div class="left">
+            <h1>$GRATIS Token Bridge</h1>
+            <p>Transfer from Ethereum to Polygon and back.</p>
+            <div class="status">Getting status&hellip;</div>
+          </div>
+          <div class="right">
+            <div class="transfer">
+              <div class="form-row">
+                <select id="direction" class="form-control">
+                  <option value="ep">Ethereum to Polygon</option>
+                  <option value="pe">Polygon to Ethereum</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <input 
+                  id="amount" 
+                  class="form-control" 
+                  type="number"
+                  min="0" 
+                  placeholder="How much $GRATIS would you like to transfer?" 
+                />
+              </div>
+              <button class="btn btn-primary" data-do="bridge" data-on="click">
+                Transfer
+              </button>
+              <a class="toggle" data-do="redeem-toggle" data-on="click" href="javascript:void(0)">
+                Redeem a Transaction?
+              </a>
+            </div>
+            <div class="redeem">
+              <div class="form-row">
+                <select id="network" class="form-control">
+                  <option value="polygon">From Polygon</option>
+                  <option value="ethereum">From Ethereum</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <input 
+                  id="tx" 
+                  class="form-control" 
+                  type="number"
+                  min="1"
+                  step="1" 
+                  placeholder="Transaction Number" 
+                />
+              </div>
+              <button class="btn btn-primary" data-do="redeem" data-on="click">
+                Redeem
+              </button>
+              <a class="toggle" data-do="transfer-toggle" data-on="click" href="javascript:void(0)">
+                Start a New Transfer?
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="foot">
+      <h3>Follow Us</h3>
+      <a class="social image" href="https://opensea.io/collection/gratitudegang" target="_blank">
+        <img src="/images/social-opensea-icon.svg" />
+      </a>
+      <a class="social" href="https://etherscan.io/address/0x641475850e0316220a2d7e902508e08f72848316" target="_blank">
+        <i class="fab fa-ethereum"></i>
+      </a>
+      <a class="social" href="https://www.twitter.com/gratitudenft/" target="_blank">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a class="social" href="https://www.instagram.com/gratitudegangnft/" target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+      <a class="social" href="https://discord.gg/XEM7NPd6xd" target="_blank">
+        <i class="fab fa-discord"></i>
+      </a>
+      <a class="social" href="https://github.com/gratitude-nft" target="_blank">
+        <i class="fab fa-github"></i>
+      </a>
+      <div class="masthead">
+        <a href="/terms-of-use.html">Terms and Conditions</a>
+        | <a href="/privacy-policy.html">Privacy Policy</a>
+        <div>
+          Proudly made in the Philippines
+        </div>
+      </div>
+    </footer>
+    <template id="tpl-modal-bridge">
+      <div class="modal">
+        <div class="overlay" data-do="modal-overlay-close" data-on="click">
+          <header class="modal-head">
+            <h3>Transferring Gratis</h3>
+          </header>
+          <section class="modal-body">
+            <div class="info">
+              <p>
+                Transfering {AMOUNT} Gratis in from {SOURCE} to 
+                {DESTINATION}. 
+              </p>
+              <p>
+                Please make sure to have enough {SOURCE} 
+                and {DESTINATION} gas before starting. Once started, 
+                please do not leave this page.
+              </p>
+              <hr />
+              <a class="btn btn-solid btn-primary" data-do="bridge-start" data-on="click" href="javascript:void(0)">
+                <i class="fas fa-check"></i>
+                Start
+              </a>
+              <a class="btn btn-solid btn-danger" data-do="modal-close" data-on="click" href="javascript:void(0)">
+                <i class="fas fa-times"></i>
+                Cancel
+              </a>
+            </div>
+            <div class="steps">
+              <div class="step pending">
+                <span class="label">Step 1: Checking Balance</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 2: Changing Network</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 3: Stashing Gratis</span>
+                <div class="notes"></div>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 4: Signing Transaction</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 5: Changing Network</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 6: Redeeming Gratis</span>
+              </div>
+
+              <a class="btn btn-solid btn-primary" data-do="modal-close" data-on="click" href="javascript:void(0)">
+                Close
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </template>
+    <template id="tpl-modal-redeem">
+      <div class="modal">
+        <div class="overlay" data-do="modal-overlay-close" data-on="click">
+          <header class="modal-head">
+            <h3>Redeeming Gratis</h3>
+          </header>
+          <section class="modal-body">
+            <div class="info">
+              <p>
+                Redeeming <strong>Transaction {TX}</strong> from {DESTINATION}. 
+              </p>
+              <p>
+                Please make sure to have enough {DESTINATION} gas before 
+                starting. Once started, please do not leave this page.
+              </p>
+              <hr />
+              <a class="btn btn-solid btn-primary" data-do="redeem-start" data-on="click" href="javascript:void(0)">
+                <i class="fas fa-check"></i>
+                Start
+              </a>
+              <a class="btn btn-solid btn-danger" data-do="modal-close" data-on="click" href="javascript:void(0)">
+                <i class="fas fa-times"></i>
+                Cancel
+              </a>
+            </div>
+            <div class="steps">
+              <div class="step pending">
+                <span class="label">Step 1: Changing Network</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 2: Checking Transaction</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 3: Signing Transaction</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 4: Changing Network</span>
+              </div>
+              <div class="step pending">
+                <span class="label">Step 5: Redeeming Gratis</span>
+              </div>
+
+              <a class="btn btn-solid btn-primary" data-do="modal-close" data-on="click" href="javascript:void(0)">
+                Close
+              </a>
+            </div>
+          </section>
+        </div>
+      </div>
+    </template>
+    <script type="text/javascript" src="/scripts/lib/web3.js"></script>
+    <script type="text/javascript" src="/scripts/lib/doon.js"></script>
+    <script type="text/javascript" src="/scripts/lib/notify.js"></script>
+    <script type="text/javascript" src="/scripts/lib/particle.js"></script>
+    <script type="text/javascript" src="/scripts/lib/metamask.js?v10"></script>
+    <script type="text/javascript" src="/scripts/contracts-testnet.js?v10"></script>
+    <script type="text/javascript" src="/scripts/bridge.js"></script>
+  </body>
+</html>

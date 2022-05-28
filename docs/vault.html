@@ -5,19 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <title>Gifts of Gratitude</title>
-    <meta name="description" content="Shop for exclusive NFTs, event tickets and merch by the Gratitude Gang" />
+    <title>Gratitude Vault</title>
+    <meta name="description" content="The Gratitude Gang Vault is a colection of exclusive NFTs for sunflower holders." />
     
-    <meta property="og:title" content="Gifts of Gratitude" />
-    <meta property="og:description" content="Shop for exclusive NFTs, event tickets and merch by the Gratitude Gang" />
+    <meta property="og:title" content="Gratitude Vault" />
+    <meta property="og:description" content="The Gratitude Gang Vault is a colection of exclusive NFTs for sunflower holders." />
     <meta property="og:image" content="//www.gratitudegang.io/images/logo-banner.jpg" />
-    <meta property="og:url" content="//www.gratitudegang.io/gifts" />
+    <meta property="og:url" content="//www.gratitudegang.io/vault" />
     <meta property="og:type" content="website" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:site" content="@gratitudenft" />
-    <meta name="twitter:title" content="Gifts of Gratitude" />
-    <meta name="twitter:description" content="Shop for exclusive NFTs, event tickets and merch by the Gratitude Gang" />
+    <meta name="twitter:title" content="Gratitude Vault" />
+    <meta name="twitter:description" content="The Gratitude Gang Vault is a colection of exclusive NFTs for sunflower holders." />
     <meta name="twitter:image" content="https://www.gratitudegang.io/images/preview-twitter.png" />
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
@@ -27,7 +27,7 @@
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
     <link rel="stylesheet" type="text/css" href="/styles/theme.css?v10" />
-    <link rel="stylesheet" type="text/css" href="/styles/gifts.css?v10" />
+    <link rel="stylesheet" type="text/css" href="/styles/vault.css?v10" />
   </head>
   <body>
     <header class="head">
@@ -47,25 +47,28 @@
     </header>
     <main class="body">
       <section class="section section-1">
-        <h1>Gifts of Gratitude</h1>
-        <p>Get exclusive offers for the Gratitude Gang community.</p>
-        <div class="disconnected">
-          <a class="btn btn-large btn-primary" data-do="connect" data-on="click" href="javascript:void(0)">
-            Connect Your Ethereum Wallet
-          </a>
-          <a class="note" href="https://metamask.app.link/dapp/www.gratitudegang.io/gifts" target="_blank">
-            Use Metamask Mobile
-          </a>
-        </div>
-
+        <h1>Gratitude Vault</h1>
+        <p>The Gratitude Gang Vault is a colection of exclusive NFTs for sunflower holders.</p>
         <div class="connected">
-          <a class="note" href="https://opensea.io/collection/gifts-of-gratitude" target="_blank">
-            View on OpenSea
+          <a class="note" href="./bridge.html">
+            Send $GRATIS to Polygon
           </a>
         </div>
       </section>
-      <section class="section section-2">   
-        <div class="items"></div>
+      <section class="section section-2">
+        <div class="disconnected">
+          <div class="vault">
+            <img data-do="connect" data-on="click" src="/images/vault.png" />
+          </div> 
+        </div>
+        <div class="connected">
+          <div class="items">
+            <div class="alert">
+              <i class="fas fa-info-circle"></i>
+              Loading. This could take a few minutes&hellip;
+            </div>
+          </div>
+        </div>
       </section>
     </main>
     <footer class="foot">
@@ -97,16 +100,15 @@
       </div>
     </footer>
     <template id="tpl-item">
-      <div class="item" data-do="modal-open" data-id="{ID}" data-on="click">
+      <div class="item" data-do="modal-open" data-network="{NETWORK}" data-id="{ID}" data-on="click">
         <div class="preview">
           <img src="{IMAGE}" loading="lazy" />
         </div>
         <div class="info">
           <h3>{NAME}</h3>
-          <div class="supply">{SUPPLY}</div>
           <div class="price">
             <span class="eth{ETH_HIDE}">
-              <img src="https://openseauserdata.com/files/6f8e2979d428180222796ff4a33ab929.svg" width="8" /> 
+              <img src="{NETWORK_IMAGE}" width="8" /> 
               {ETH_PRICE}
             </span>
             <span class="gratis{GRATIS_HIDE}">🌻 {GRATIS_PRICE}</span>
@@ -127,34 +129,36 @@
               </div>
               <div class="info">
                 <h3>{NAME}</h3>
-                {AUDIO}
-                <p>{DESCRIPTION}</p>
+                <a href="{MARKETPLACE}/{CONTRACT}/{TOKEN_ID}" target="_blank">
+                  View on OpenSea
+                </a>
               </div>
             </div>
           </section>
           <footer class="modal-foot">
-            <div class="supply">{SUPPLY}</div>
             <div class="actions">
               <a 
                 class="btn btn-outline btn-primary{ETH_HIDE}"
                 data-id="{ID}"
+                data-token="{TOKEN_ID}"
+                data-address="{CONTRACT}"
+                data-network="{NETWORK}"
                 data-price="{ETH_PRICE}"
-                data-max="{MAX}"
-                data-supply="{SUPPLY}"
                 data-do="buy-eth" 
                 data-on="click"
                 href="javascript:void(0)"
-              >Mint Now For Ξ {ETH_PRICE} ETH</a>
+              ><img src="{NETWORK_IMAGE}" width="8" /> {ETH_PRICE} {NETWORK_CURRENCY}</a>
               <a 
                 class="btn btn-outline btn-primary{GRATIS_HIDE}"
                 data-id="{ID}"
+                data-token="{TOKEN_ID}"
+                data-address="{CONTRACT}"
+                data-network="{NETWORK}"
                 data-price="{GRATIS_PRICE}"
-                data-max="{MAX}"
-                data-supply="{SUPPLY}"
                 data-do="buy-gratis" 
                 data-on="click"
                 href="javascript:void(0)"
-              >Mint Now For 🌻 {GRATIS_PRICE} GRATIS</a>
+              >🌻 {GRATIS_PRICE} GRATIS</a>
             </div>
           </footer>
         </div>
@@ -165,6 +169,6 @@
     <script type="text/javascript" src="/scripts/lib/notify.js"></script>
     <script type="text/javascript" src="/scripts/lib/metamask.js?v10"></script>
     <script type="text/javascript" src="/scripts/contracts-mainnet.js?v10"></script>
-    <script type="text/javascript" src="/scripts/gifts.js?v10"></script>
+    <script type="text/javascript" src="/scripts/vault.js?v10"></script>
   </body>
 </html>

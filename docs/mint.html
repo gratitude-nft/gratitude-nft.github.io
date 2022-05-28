@@ -26,8 +26,8 @@
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600;1,700;1,800&display=swap" />
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v8" />
-    <link rel="stylesheet" type="text/css" href="/styles/mint.css?v8" />
+    <link rel="stylesheet" type="text/css" href="/styles/theme.css?v10" />
+    <link rel="stylesheet" type="text/css" href="/styles/mint.css?v10" />
   </head>
   <body>
     <header class="head">
@@ -37,6 +37,7 @@
         <a href="/howto.html">How To</a>
         <a href="/stake.html">Staking</a>
         <a href="/gifts.html">Gifts</a>
+        <a href="/vault.html">Vault</a>
         <a class="btn btn-outline-primary" href="/mint.html">Mint Now</a>
         <a class="btn btn-primary" href="https://discord.gg/XEM7NPd6xd" target="_blank">
           <i class="fab fa-discord"></i>
@@ -54,12 +55,12 @@
         </div>
       </section>
       <section class="section section-2">
-        <div id="disconnected">
+        <div class="disconnected">
           <a class="btn btn-primary" data-do="connect" data-on="click" href="javascript:void(0)">
             Connect Your Ethereum Wallet
           </a>
         </div>
-        <div id="connected">
+        <div class="connected">
           <form id="form-mint">
             <h3>How many to mint?</h3>
             <div class="form-row">
@@ -68,7 +69,7 @@
               <button type="button" class="btn btn-primary" data-do="increase-amount" data-on="click">+</button>
             </div>
             <div class="subtotal">Ξ 0.08 ETH</div>
-            <button class="btn btn-primary" type="submit">Mint Now</button>
+            <button class="btn btn-large btn-primary" type="submit">Mint Now</button>
           </form>
         </div>
         <a class="note" href="https://metamask.app.link/dapp/www.gratitudegang.io/mint" target="_blank">
@@ -183,11 +184,11 @@
         </div>
       </div>
     </footer>
-    <script src="//cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script type="text/javascript" src="/scripts/lib/web3.js"></script>
     <script type="text/javascript" src="/scripts/lib/doon.js"></script>
-    <script type="text/javascript" src="/scripts/lib/blockapi.js?v8"></script>
     <script type="text/javascript" src="/scripts/lib/notify.js"></script>
-    <script type="text/javascript" src="/scripts/contracts-mainnet.js?v8"></script>
-    <script type="text/javascript" src="/scripts/mint.js?v8"></script>
+    <script type="text/javascript" src="/scripts/lib/metamask.js?v10"></script>
+    <script type="text/javascript" src="/scripts/contracts-mainnet.js?v10"></script>
+    <script type="text/javascript" src="/scripts/mint.js?v10"></script>
   </body>
 </html>
