@@ -82,6 +82,7 @@
     //populate ethereum items in item container
     for (const network of ['ethereum', 'polygon']) {
       for (let i = 0; true; i++) {
+        if (network === 'polygon' && i < 2) continue
         try { // to get metadata
           const tokenInfo = await (vault[network].read().nfts(i + 1))
           if (tokenInfo.contractAddress === '0x0000000000000000000000000000000000000000') {
@@ -99,13 +100,22 @@
           const owner = await (
             tokenContract.read().ownerOf(tokenInfo.tokenId)
           )
+
           if (owner !== vault[network].address) {
             continue;
           }
           //get metadata
-          const tokenURI = (await (
-            tokenContract.read().tokenURI(tokenInfo.tokenId)
-          )).replace('ipfs://', 'https://ipfs.io/ipfs/')
+          let tokenURI
+          if (network === 'ethereum' 
+            //case for ENS
+            && tokenInfo.contractAddress === '0x57f1887a8BF19b14fC0dF6Fd9B2acc9Af147eA85'
+          ) {
+            tokenURI = `https://metadata.ens.domains/mainnet/${tokenInfo.contractAddress}/${tokenInfo.tokenId}`
+          } else {
+            tokenURI = (await (
+              tokenContract.read().tokenURI(tokenInfo.tokenId)
+            )).replace('ipfs://', 'https://ipfs.io/ipfs/')
+          }
   
           const response = await fetch(tokenURI)
           const tokenMetadata = await response.json()
@@ -115,7 +125,7 @@
           const item = toElement(template.item
             .replace('{IMAGE}', tokenMetadata.image)
             .replace('{ID}', i + 1)
-            .replace('{NAME}', tokenMetadata.name)
+            .replace('{NAME}', tokenMetadata.name || '')
             .replace('{NETWORK}', network)
             .replace('{NETWORK_IMAGE}', images[network])
             .replace('{ETH_HIDE}', tokenInfo.ethPrice > 0 ? '' : ' hide')
