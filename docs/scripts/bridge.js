@@ -94,7 +94,7 @@
         await (
           sourceNetwork
             .contract('bridge')
-            .write(state.account, false, 2)
+            .write(state.account, false, 6)
             .bridge(
               destinationNetwork.config.chain_id,
               destinationNetwork.contract('bridge').address,
@@ -159,7 +159,7 @@
         await (
           destinationNetwork
             .contract('bridge')
-            .write(state.account, false, 2)
+            .write(state.account, false, 6)
             .secureRedeem(
               json.results.tx,
               MetaMaskSDK.toWei(amount),
@@ -191,6 +191,7 @@
     const txId = parseInt(fields.tx.value)
     const source = fields.network.value === 'ethereum' ? 'polygon': 'ethereum'
     const destination = fields.network.value
+    const sourceNetwork = MetaMaskSDK.network(source)
     const destinationNetwork = MetaMaskSDK.network(destination)
 
     const steps = Array.from(modal.querySelectorAll('div.step'))
@@ -198,7 +199,7 @@
     modal.querySelector('div.info').style.display = 'none'
     modal.querySelector('div.steps').style.display = 'block'
 
-    destinationNetwork.connectCB(async (newstate) => {
+    sourceNetwork.connectCB(async (newstate) => {
       //update state
       Object.assign(state, newstate)
 
@@ -206,7 +207,7 @@
       steps[0].classList.add('progress')
       steps[0].classList.remove('pending')
       try {
-        await destinationNetwork.changeInWallet()
+        await sourceNetwork.changeInWallet()
       } catch(error) {
         //go back a step
         modal.querySelector('div.info').style.display = 'block'
@@ -222,11 +223,11 @@
 
       //get tx information
       const tx = await (
-        destinationNetwork
+        sourceNetwork
           .contract('bridge')
           .read()
           .txs(txId)
-      );
+      )
       //if wrong contract id
       if (tx.contractId != destinationNetwork.config.chain_id) {
         //go back a step
@@ -236,7 +237,7 @@
         return notify('error', `Transaction ID given is not for ${destination}.`)
       }
       //if wrong contract address
-      if (tx.contractAddress !== blockmetadata[destination].contracts.bridge.address) {
+      if (tx.contractAddress !== destinationNetwork.contract('bridge').address) {
         //go back a step
         modal.querySelector('div.info').style.display = 'block'
         modal.querySelector('div.steps').style.display = 'none'
@@ -298,7 +299,7 @@
         await (
           destinationNetwork
             .contract('bridge')
-            .write(state.account, false, 2)
+            .write(state.account, false, 6)
             .secureRedeem(
               json.results.tx,
               tx.amount,
@@ -317,8 +318,8 @@
       await (destinationNetwork.contract('token').addToWallet())
 
       //clean up
-      steps[5].classList.add('done')
-      steps[5].classList.remove('progress')
+      steps[4].classList.add('done')
+      steps[4].classList.remove('progress')
       modal.querySelector('div.steps a.btn').style.display = 'block'
       //report
       notify('success', 'Redeem Complete')
