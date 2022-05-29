@@ -109,7 +109,7 @@
         return notify('error', error.message)
       }
       //get the last tx id
-      const txId = await (sourceNetwork.contract('bridge').read().lasdId())
+      const txId = await (sourceNetwork.contract('bridge').read().lastId())
       //update this step UI with the tx id
       steps[2].querySelector('div.notes').innerHTML = 
         `Remember this transaction id: <strong>${txId}</strong>`
