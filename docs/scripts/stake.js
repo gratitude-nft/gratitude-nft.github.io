@@ -64,7 +64,7 @@
       const json = await response.json()
       state.staked[i] = {
         tokenId: state.staked[i],
-        releasable: await blockapi.read(staking, 'releaseable', state.staked[i]),
+        releasable: await staking.read().releaseable(state.staked[i]),
         metadata: json
       }
     }
