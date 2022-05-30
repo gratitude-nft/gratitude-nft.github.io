@@ -12,10 +12,8 @@
     ethereum: MetaMaskSDK.network('ethereum').contract('token'),
     polygon: MetaMaskSDK.network('polygon').contract('token')
   }
-  const nft = {
-    ethereum: MetaMaskSDK.network('ethereum').contract('nft'),
-    polygon: MetaMaskSDK.network('polygon').contract('nft')
-  }
+  const nft = MetaMaskSDK.network('ethereum').contract('nft')
+  const staking = MetaMaskSDK.network('ethereum').contract('staking')
   const vault = {
     ethereum: MetaMaskSDK.network('ethereum').contract('vault'),
     polygon: MetaMaskSDK.network('polygon').contract('vault')
@@ -35,9 +33,12 @@
 
   const connected = async function(newstate, session) {
     //token gate
-    const balance = await (nft.ethereum.read().balanceOf(newstate.account))
+    let balance = await (nft.read().balanceOf(newstate.account))
     if (balance == 0) {
-      return disconnected({}, new Error('Must be a sunflower holder'))
+      balance = await (staking.read().tokensStaked(newstate.account))
+      if (balance.length == 0) {
+        return disconnected({}, new Error('Must be a sunflower holder'))
+      }
     }
     //update state
     Object.assign(state, newstate)
