@@ -33,13 +33,13 @@
 
   const connected = async function(newstate, session) {
     //token gate
-    let balance = await (nft.read().balanceOf(newstate.account))
-    if (balance == 0) {
-      balance = await (staking.read().tokensStaked(newstate.account))
-      if (balance.length == 0) {
-        return disconnected({}, new Error('Must be a sunflower holder'))
-      }
-    }
+    //let balance = await (nft.read().balanceOf(newstate.account))
+    //if (balance == 0) {
+      //balance = await (staking.read().tokensStaked(newstate.account))
+      //if (balance.length == 0) {
+        //return disconnected({}, new Error('Must be a sunflower holder'))
+      //}
+    //}
     //update state
     Object.assign(state, newstate)
     //if first time connecting

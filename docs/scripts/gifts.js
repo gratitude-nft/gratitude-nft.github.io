@@ -111,6 +111,21 @@
     await network.connectCB(connected, disconnected)
   })
 
+  window.addEventListener('change-price-keyup', function (e) {
+    setTimeout(() => {
+      const ethBtn = e.for.parentNode.parentNode.querySelector('a.btn-eth')
+      const gratisBtn = e.for.parentNode.parentNode.querySelector('a.btn-gratis')
+      ethBtn.setAttribute('data-quantity', e.for.value)
+      ethBtn.innerHTML = `Mint Now For Ξ ${MetaMaskSDK.toEther(
+        ethBtn.getAttribute('data-price')
+      ) * e.for.value} ETH`
+      gratisBtn.setAttribute('data-quantity', e.for.value)
+      gratisBtn.innerHTML = `Mint Now For 🌻 ${MetaMaskSDK.toEther(
+        gratisBtn.getAttribute('data-price')
+      ) * e.for.value} GRATIS`
+    })
+  })
+
   window.addEventListener('buy-eth-click', async function buyETH(e) {
     //if not connected
     if (!state.account) {
@@ -123,7 +138,7 @@
     //get all variables needed for this transaction
     const id = parseInt(e.for.getAttribute('data-id'))
     const max = parseInt(e.for.getAttribute('data-max'))
-    const price = e.for.getAttribute('data-price')
+    const price = e.for.getAttribute('data-price') * e.for.getAttribute('data-quantity')
     const supply = parseInt(e.for.getAttribute('data-supply'))
     //validation
     if (price == 0) {
@@ -179,7 +194,7 @@
     //get variables needed for this transaction
     const id = parseInt(e.for.getAttribute('data-id'))
     const max = parseInt(e.for.getAttribute('data-max'))
-    const price = e.for.getAttribute('data-price')
+    const price = e.for.getAttribute('data-price') * e.for.getAttribute('data-quantity')
     const supply = parseInt(e.for.getAttribute('data-supply'))
     //validate
     if (price == 0) {
@@ -264,6 +279,7 @@
         ? (info.supply > 0 || info.max < 26 ? `${info.max - info.supply}/${info.max} remaining`: '')
         : (info.supply > 0 ? `${info.supply} sold`: '')
       )
+      .replace('{QTY_MAX}', info.max - info.supply)
       .replace('{MAX}', info.max)
       .replace('{MAX}', info.max)
       .replace('{SUPPLY}', info.supply)
