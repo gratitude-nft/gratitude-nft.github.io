@@ -145,7 +145,7 @@
           //listen for event states
           window.doon(item)
         } catch(e) {
-          break
+          continue
         }
       }
     }
